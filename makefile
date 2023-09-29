@@ -11,13 +11,13 @@ all: \
 	$(OUT_DIR)/debug/console.dll \
 	$(OUT_DIR)/debug/file.dll \
 	$(OUT_DIR)/debug/file.test.dll \
-	$(OUT_DIR)/debug/shell.exe \
+	$(OUT_DIR)/debug/markx.exe \
 	$(OUT_DIR)/debug/tcatbin.dll \
 	$(OUT_DIR)/debug/test.exe \
 	$(OUT_DIR)/release/console.dll \
 	$(OUT_DIR)/release/file.dll \
 	$(OUT_DIR)/release/file.test.dll \
-	$(OUT_DIR)/release/shell.exe \
+	$(OUT_DIR)/release/markx.exe \
 	$(OUT_DIR)/release/tcatbin.dll \
 	$(OUT_DIR)/release/test.exe
 	$(OUT_DIR)/debug/test.exe
@@ -149,34 +149,34 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
 
 # ----------------------------------------------------------------------
-# shell
+# markx
 
-SHELL_SRC = \
-	src/shell/main.cpp \
-	src/shell/verb.play.cpp \
+MARKX_SRC = \
+	src/markx/main.cpp \
+	src/markx/verb.update.cpp \
 
-SHELL_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(SHELL_SRC)))
+MARKX_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(MARKX_SRC)))
 
-$(OUT_DIR)/debug/shell.exe: $(SHELL_DEBUG_OBJ) $(OUT_DIR)/debug/tcatlib.lib
+$(OUT_DIR)/debug/markx.exe: $(MARKX_DEBUG_OBJ) $(OUT_DIR)/debug/tcatlib.lib
 	$(info $< --> $@)
 	@mkdir -p $(OUT_DIR)/debug
-	@$(LINK_CMD) -o $@ $(SHELL_DEBUG_OBJ) $(DEBUG_LNK_FLAGS_POST) -Lbin/out/debug -ltcatlib -lole32
+	@$(LINK_CMD) -o $@ $(MARKX_DEBUG_OBJ) $(DEBUG_LNK_FLAGS_POST) -Lbin/out/debug -ltcatlib
 
-$(SHELL_DEBUG_OBJ): $(OBJ_DIR)/debug/%.o: src/%.cpp
+$(MARKX_DEBUG_OBJ): $(OBJ_DIR)/debug/%.o: src/%.cpp
 	$(info $< --> $@)
-	@mkdir -p $(OBJ_DIR)/debug/shell
+	@mkdir -p $(OBJ_DIR)/debug/markx
 	@$(COMPILE_CMD) $(DEBUG_CC_FLAGS) $< -o $@
 
-SHELL_RELEASE_OBJ = $(subst src,$(OBJ_DIR)/release,$(patsubst %.cpp,%.o,$(SHELL_SRC)))
+MARKX_RELEASE_OBJ = $(subst src,$(OBJ_DIR)/release,$(patsubst %.cpp,%.o,$(MARKX_SRC)))
 
-$(OUT_DIR)/release/shell.exe: $(SHELL_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.lib
+$(OUT_DIR)/release/markx.exe: $(MARKX_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.lib
 	$(info $< --> $@)
 	@mkdir -p $(OUT_DIR)/release
-	@$(LINK_CMD) -o $@ $(SHELL_RELEASE_OBJ) $(RELEASE_LNK_FLAGS_POST) -Lbin/out/release -ltcatlib -lole32
+	@$(LINK_CMD) -o $@ $(MARKX_RELEASE_OBJ) $(RELEASE_LNK_FLAGS_POST) -Lbin/out/release -ltcatlib
 
-$(SHELL_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
+$(MARKX_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 	$(info $< --> $@)
-	@mkdir -p $(OBJ_DIR)/release/shell
+	@mkdir -p $(OBJ_DIR)/release/markx
 	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
 
 # ----------------------------------------------------------------------
