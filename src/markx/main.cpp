@@ -12,6 +12,8 @@ int main(int argc, const char *argv[])
 
    try
    {
+      pLog->writeLnInfo("mark up/down extensions built " __DATE__ " " __TIME__);
+
       tcat::typePtr<console::iCommandLineParser> pParser;
 
       console::autoVerbs v;

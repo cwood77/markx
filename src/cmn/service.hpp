@@ -98,6 +98,9 @@ public:
    T *operator->()             { return &get(); }
    const T *operator->() const { return &get(); }
 
+   T& operator*()             { return get(); }
+   const T& operator*() const { return get(); }
+
    T& get()             { fetchIf(); return *m_pSvc; }
    const T& get() const { fetchIf(); return *m_pSvc; }
 

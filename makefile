@@ -152,6 +152,7 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 # markx
 
 MARKX_SRC = \
+	src/markx/finder.cpp \
 	src/markx/main.cpp \
 	src/markx/verb.update.cpp \
 

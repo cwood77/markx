@@ -1,4 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
+#include "../cmn/error.hpp"
+#include "../cmn/service.hpp"
 #include "../cmn/win32.hpp"
 #include "../file/api.hpp"
 #include "../tcatlib/api.hpp"
@@ -20,15 +22,26 @@ public:
 
    stdLog()
    : m_pSink(NULL), m_indent(0), m_freshLine(false)
-   , m_autoFlush(true), m_prefix(true), m_passFilter(0xFFFF) {}
+#ifdef cdwDebugMode
+   , m_autoFlush(true), m_prefix(true), m_passFilter(0xFFFF)
+#else
+   , m_autoFlush(true), m_prefix(false), m_passFilter(0x1)
+#endif
+   {}
 
    virtual void release() { delete this; }
 
    virtual void configure(sst::dict& d)
    {
+#ifdef cdwDebugMode
       m_autoFlush  = d.getOpt<sst::tf>("log:flush",true);
       m_prefix     = d.getOpt<sst::tf>("log:prefix",true);
+      m_passFilter = d.getOpt<sst::mint>("log:passFilter",0xFFFF);
+#else
+      m_autoFlush  = d.getOpt<sst::tf>("log:flush",true);
+      m_prefix     = d.getOpt<sst::tf>("log:prefix",false);
       m_passFilter = d.getOpt<sst::mint>("log:passFilter",0x1);
+#endif
    }
 
    virtual void configureForBackground()
@@ -152,6 +165,13 @@ private:
 tcatExposeTypeAs(stdLog,iLog);
 
 } // namespace console
+
+namespace cmn {
+
+tcatExposeSingletonTypeAs(masterErrorContext,iMasterErrorContext);
+tcatExposeSingletonTypeAs(serviceManager,serviceManager);
+
+} // namespace cmn
 
 tcatImplServer();
 
