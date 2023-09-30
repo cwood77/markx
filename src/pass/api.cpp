@@ -22,6 +22,7 @@ public:
       for(auto *p : m_passes)
       {
          m_pLog->writeLnVerbose("running %s",p->info().desc().c_str());
+         console::autoIndent _(*m_pLog);
          p->run();
       }
    }

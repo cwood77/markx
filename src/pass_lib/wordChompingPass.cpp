@@ -21,6 +21,31 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      n.forEachChild<model::text>([&](auto& t){ runOnText(t); });
+   }
+
+private:
+   void runOnText(model::text& n)
+   {
+      const char *pThumb = n.text.c_str();
+      const char *pStart = pThumb;
+      for(;*pThumb!=0;++pThumb)
+      {
+         if(*pThumb == ' ' )
+         {
+            std::string word(pStart,pThumb-pStart);
+            m_pLog->writeLnTemp("found word <%s>",word.c_str());
+            n.addChild<model::text>().text = word;
+            pStart = pThumb + 1;
+         }
+      }
+
+      std::string word(pStart,pThumb-pStart);
+      if(!word.empty())
+      {
+         m_pLog->writeLnTemp("final word <%s>",word.c_str());
+         n.addChild<model::text>().text = word;
+      }
    }
 };
 

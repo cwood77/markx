@@ -1,3 +1,4 @@
+#include "../cmn/autoPtr.hpp"
 #include "../tcatlib/api.hpp"
 #include "api.hpp"
 
@@ -21,6 +22,16 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      m_pLog->writeLnVerbose("loading file: %s",n.path.c_str());
+      cmn::sizedAlloc block;
+      {
+         cmn::autoCFilePtr file(n.path,"r");
+         block.realloc(file.calculateFileSizeFromHere());
+         ::fread(block.ptr(),block.size(),1,file.fp);
+      }
+      m_pLog->writeLnVerbose("read %lld byte(s)",block.size());
+
+      n.addChild<model::text>().text = block.ptr();
    }
 };
 

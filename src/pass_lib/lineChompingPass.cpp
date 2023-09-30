@@ -1,5 +1,6 @@
 #include "../tcatlib/api.hpp"
 #include "api.hpp"
+#include <cstring>
 
 namespace pass {
 namespace {
@@ -21,6 +22,36 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      auto& block = n.single().as<model::text>();
+
+      const char *pThumb = block.text.c_str();
+      const char *pStart = pThumb;
+      for(;*pThumb!=0;++pThumb)
+      {
+         size_t s = 0;
+         if(*pThumb == '\n')
+            s = 1;
+         else if(::strncmp(pThumb,"\r\n",2)==0)
+            s = 2;
+
+         if(s)
+         {
+            std::string line(pStart,pThumb-pStart);
+            m_pLog->writeLnTemp("found line <%s>",line.c_str());
+            n.addChild<model::text>().text = line;
+            pStart = pThumb + s;
+            pThumb += (s-1);
+         }
+      }
+
+      std::string line(pStart,pThumb-pStart);
+      if(!line.empty())
+      {
+         m_pLog->writeLnTemp("final line <%s>",line.c_str());
+         n.addChild<model::text>().text = line;
+      }
+
+      block.destroy();
    }
 };
 

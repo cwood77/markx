@@ -33,6 +33,15 @@ public:
       }
    }
 
+   node& single()
+   {
+      if(m_children.size() != 1)
+         throw cmn::error(cdwHere,"wrong number of children")
+            .with("actual size",m_children.size())
+            .raise();
+      return **m_children.begin();
+   }
+
    bool hasChildren() const { return m_children.size() > 0; }
 
    template<class T>
@@ -42,7 +51,7 @@ public:
    T *asIf(){ return dynamic_cast<T*>(this); }
 
    template<class T>
-   T& as(){ return *asIf<T>(this); }
+   T& as(){ return *asIf<T>(); }
 
 protected:
    node() : m_pParent(NULL) {}
