@@ -11,6 +11,7 @@ namespace state {
       kEmpty,
       kSingleBlock,
       kLines,
+      kParagraphs,
       kWords,
       kTokens
    };

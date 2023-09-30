@@ -1,3 +1,4 @@
+#include "../model/lang.hpp"
 #include "../pass_lib/api.hpp"
 #include "../tcatlib/api.hpp"
 
@@ -21,6 +22,91 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      if(n.demandService<model::iLanguage>().desc() != "markdown")
+      {
+         m_pLog->writeLnVerbose("skipping file in alien language");
+         return;
+      }
+
+      n.forEachChild<model::text>([&](auto& p)
+      {
+         p.template forEachChild<model::text>([&](auto& l)
+         {
+            forEachLine(l);
+         });
+      });
+   }
+
+private:
+   void forEachLine(model::text& l)
+   {
+      if(!l.hasChildren())
+         return;
+
+      auto& word = l.first().as<model::text>();
+      m_pLog->writeLnTemp("checking word <%s>",word.text.c_str());
+
+      bool found = false;
+      for(size_t i=0;i<20&&!found;i++)
+      {
+         std::string symbol(i,'#');
+         found = mapSymbol(symbol,i,word);
+      }
+   }
+
+   bool mapSymbol(const std::string& s, size_t level, model::text& n)
+   {
+      if(n.text == s)
+      {
+         m_pLog->writeLnVerbose("found symbol %s",s.c_str());
+         auto& h = n.replaceSelf<model::header>();
+         h.level = level;
+         expandHeader(h);
+         return true;
+      }
+      return false;
+   }
+
+   void expandHeader(model::header& h)
+   {
+      bool foundNumbers = false;
+      while(true)
+      {
+         auto *pNext = h.nextSibling();
+         if(!pNext)
+            break;
+
+         auto& t = pNext->as<model::text>();
+         bool handled = false;
+         if(!foundNumbers)
+         {
+            foundNumbers = eatNumbers(h,t);
+            handled = foundNumbers;
+         }
+         if(!handled)
+            eatTitleWord(h,t);
+      }
+
+      m_pLog->writeLnTemp("after expansion, header is <%lld>, <%s>",h.level,h.text.c_str());
+   }
+
+   bool eatNumbers(model::header& h, model::text& w)
+   {
+      const char *pThumb = w.text.c_str();
+      for(;*pThumb!=0;pThumb++)
+         if(!::isdigit(*pThumb) && *pThumb!='.')
+            return false;
+
+      w.destroy();
+      return true;
+   }
+
+   void eatTitleWord(model::header& h, model::text& w)
+   {
+      if(!h.text.empty())
+         h.text += " ";
+      h.text += w.text;
+      w.destroy();
    }
 };
 

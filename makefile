@@ -289,6 +289,7 @@ PASSLIB_SRC = \
 	src/pass_lib/lineChompingPass.cpp \
 	src/pass_lib/main.cpp \
 	src/pass_lib/numberHeadersPass.cpp \
+	src/pass_lib/paragraphClumpingPass.cpp \
 	src/pass_lib/singleBlockLoadingPass.cpp \
 	src/pass_lib/wordChompingPass.cpp \
 

@@ -137,6 +137,11 @@ public:
    unimplemented(const sourceLocation& sl) : error(sl,"unimplemented") {}
 };
 
+class unexpected : public error {
+public:
+   unexpected(const sourceLocation& sl) : error(sl,"unexpected") {}
+};
+
 } // namespace cmn
 
 #endif // ___cmn_error___

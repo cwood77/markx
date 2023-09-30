@@ -19,9 +19,15 @@ public:
    explicit decomp(const iPassInfo& info) : filePassBase(info) {}
 
 protected:
-   virtual void runOnFile(model::file& n)
+   virtual void runOnFile(model::file& f)
    {
-      n.forEachChild<model::text>([&](auto& t){ runOnText(t); });
+      f.forEachChild<model::text>([&](auto& p)
+      {
+         p.template forEachChild<model::text>([&](auto& l)
+         {
+            runOnText(l);
+         });
+      });
    }
 
 private:
@@ -31,7 +37,7 @@ private:
       const char *pStart = pThumb;
       for(;*pThumb!=0;++pThumb)
       {
-         if(*pThumb == ' ' )
+         if(*pThumb == ' ')
          {
             std::string word(pStart,pThumb-pStart);
             m_pLog->writeLnTemp("found word <%s>",word.c_str());
@@ -65,7 +71,7 @@ tcatExposeSingletonTypeAs(recompInfo,iPassInfo);
 class decompInfo : public iDecompositionInfo {
 public:
    virtual std::string desc() const { return "word chomping pass"; }
-   virtual state::type getInput() const { return state::kLines; }
+   virtual state::type getInput() const { return state::kParagraphs; }
    virtual iPass& create() const { return *new decomp(*this); }
    virtual state::type getOutput() const { return state::kWords; }
    virtual std::string inverseGuid() const { return recompInfo::kDesc; }
