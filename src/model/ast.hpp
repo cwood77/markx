@@ -43,6 +43,18 @@ public:
       }
    }
 
+   template<class T>
+   void forEachDescendent(std::function<void(T&)> f)
+   {
+      for(auto *pChild : m_children)
+      {
+         auto *pLeaf = dynamic_cast<T*>(pChild);
+         if(pLeaf)
+            f(*pLeaf);
+         pChild->forEachDescendent<T>(f);
+      }
+   }
+
    node& first()
    {
       if(m_children.size() == 0)
@@ -106,6 +118,7 @@ public:
    header() : level(0) {}
 
    size_t level;
+   std::string number;
    std::string text;
 };
 

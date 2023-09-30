@@ -97,6 +97,7 @@ private:
          if(!::isdigit(*pThumb) && *pThumb!='.')
             return false;
 
+      h.number = w.text;
       w.destroy();
       return true;
    }
