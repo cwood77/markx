@@ -5,6 +5,9 @@
 #include "../console/log.hpp"
 #include "../file/api.hpp"
 #include "../file/manager.hpp"
+#include "../model/ast.hpp"
+#include "../model/loadsave.hpp"
+#include "../pass/api.hpp"
 #include "../tcatlib/api.hpp"
 #include "finder.hpp"
 #include <memory>
@@ -61,6 +64,7 @@ void command::run(console::iLog& l)
    if(basePath.empty())
       basePath = fMan->calculatePath(file::iFileManager::kExeAdjacent,"");
 
+   // debug dump
    {
       l.writeLnDebug("recursive: %d",oRecursive?1:0);
       l.writeLnDebug("in: %s",oInFilePath.c_str());
@@ -68,8 +72,28 @@ void command::run(console::iLog& l)
       l.writeLnDebug("basePath: %s",basePath.c_str());
    }
 
-   std::set<std::string> files;
-   finder(oInFilePattern,oRecursive).find(basePath,files);
+   std::unique_ptr<model::rootNode> pNode(new model::rootNode());
+   cmn::autoService<model::rootNode> _n(*svcMan,*pNode);
+   {
+      l.writeLnVerbose("discovering files");
+      std::set<std::string> files;
+      finder(oInFilePattern,oRecursive).find(basePath,files);
+      for(auto f : files)
+         pNode->addChild(*new model::file(f));
+   }
+
+   l.writeLnVerbose("scheduling passes");
+   std::unique_ptr<pass::iPassSchedule> pSched;
+   {
+      tcat::typePtr<pass::iPassManager> pm;
+      tcat::typePtr<pass::iPassCatalog>()->addAll(*pm);
+      pSched.reset(&pm->compile());
+   }
+
+   l.writeLnVerbose("running passes");
+   pSched->run();
+
+   l.writeLnVerbose("done");
 }
 
 } // anonymous namespace

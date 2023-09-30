@@ -12,12 +12,18 @@ all: \
 	$(OUT_DIR)/debug/file.dll \
 	$(OUT_DIR)/debug/file.test.dll \
 	$(OUT_DIR)/debug/markx.exe \
+	$(OUT_DIR)/debug/model.dll \
+	$(OUT_DIR)/debug/pass.dll \
+	$(OUT_DIR)/debug/pass_lib.dll \
 	$(OUT_DIR)/debug/tcatbin.dll \
 	$(OUT_DIR)/debug/test.exe \
 	$(OUT_DIR)/release/console.dll \
 	$(OUT_DIR)/release/file.dll \
 	$(OUT_DIR)/release/file.test.dll \
 	$(OUT_DIR)/release/markx.exe \
+	$(OUT_DIR)/release/model.dll \
+	$(OUT_DIR)/release/pass.dll \
+	$(OUT_DIR)/release/pass_lib.dll \
 	$(OUT_DIR)/release/tcatbin.dll \
 	$(OUT_DIR)/release/test.exe
 	$(OUT_DIR)/debug/test.exe
@@ -178,6 +184,99 @@ $(OUT_DIR)/release/markx.exe: $(MARKX_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.li
 $(MARKX_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 	$(info $< --> $@)
 	@mkdir -p $(OBJ_DIR)/release/markx
+	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
+
+# ----------------------------------------------------------------------
+# model
+
+MODEL_SRC = \
+	src/model/loadsave.cpp \
+	src/model/main.cpp \
+
+MODEL_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(MODEL_SRC)))
+
+$(OUT_DIR)/debug/model.dll: $(MODEL_DEBUG_OBJ) $(OUT_DIR)/debug/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/debug
+	@$(LINK_CMD) -shared -o $@ $(MODEL_DEBUG_OBJ) $(DEBUG_LNK_FLAGS_POST) -Lbin/out/debug -ltcatlib
+
+$(MODEL_DEBUG_OBJ): $(OBJ_DIR)/debug/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/debug/model
+	@$(COMPILE_CMD) $(DEBUG_CC_FLAGS) $< -o $@
+
+MODEL_RELEASE_OBJ = $(subst src,$(OBJ_DIR)/release,$(patsubst %.cpp,%.o,$(MODEL_SRC)))
+
+$(OUT_DIR)/release/model.dll: $(MODEL_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/release
+	@$(LINK_CMD) -shared -o $@ $(MODEL_RELEASE_OBJ) $(RELEASE_LNK_FLAGS_POST) -Lbin/out/release -ltcatlib
+
+$(MODEL_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/release/model
+	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
+
+# ----------------------------------------------------------------------
+# pass
+
+PASS_SRC = \
+	src/pass/api.cpp \
+	src/pass/main.cpp \
+
+PASS_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(PASS_SRC)))
+
+$(OUT_DIR)/debug/pass.dll: $(PASS_DEBUG_OBJ) $(OUT_DIR)/debug/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/debug
+	@$(LINK_CMD) -shared -o $@ $(PASS_DEBUG_OBJ) $(DEBUG_LNK_FLAGS_POST) -Lbin/out/debug -ltcatlib
+
+$(PASS_DEBUG_OBJ): $(OBJ_DIR)/debug/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/debug/pass
+	@$(COMPILE_CMD) $(DEBUG_CC_FLAGS) $< -o $@
+
+PASS_RELEASE_OBJ = $(subst src,$(OBJ_DIR)/release,$(patsubst %.cpp,%.o,$(PASS_SRC)))
+
+$(OUT_DIR)/release/pass.dll: $(PASS_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/release
+	@$(LINK_CMD) -shared -o $@ $(PASS_RELEASE_OBJ) $(RELEASE_LNK_FLAGS_POST) -Lbin/out/release -ltcatlib
+
+$(PASS_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/release/pass
+	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
+
+# ----------------------------------------------------------------------
+# pass_lib
+
+PASSLIB_SRC = \
+	src/pass_lib/main.cpp \
+	src/pass_lib/numberHeadersPass.cpp \
+
+PASSLIB_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(PASSLIB_SRC)))
+
+$(OUT_DIR)/debug/pass_lib.dll: $(PASSLIB_DEBUG_OBJ) $(OUT_DIR)/debug/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/debug
+	@$(LINK_CMD) -shared -o $@ $(PASSLIB_DEBUG_OBJ) $(DEBUG_LNK_FLAGS_POST) -Lbin/out/debug -ltcatlib
+
+$(PASSLIB_DEBUG_OBJ): $(OBJ_DIR)/debug/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/debug/pass_lib
+	@$(COMPILE_CMD) $(DEBUG_CC_FLAGS) $< -o $@
+
+PASSLIB_RELEASE_OBJ = $(subst src,$(OBJ_DIR)/release,$(patsubst %.cpp,%.o,$(PASSLIB_SRC)))
+
+$(OUT_DIR)/release/pass_lib.dll: $(PASSLIB_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/release
+	@$(LINK_CMD) -shared -o $@ $(PASSLIB_RELEASE_OBJ) $(RELEASE_LNK_FLAGS_POST) -Lbin/out/release -ltcatlib
+
+$(PASSLIB_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/release/pass_lib
 	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
 
 # ----------------------------------------------------------------------
