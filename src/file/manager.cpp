@@ -447,6 +447,17 @@ bool fileManager::doesFileExist(const std::string& path) const
    return fileManager::fileExists(path);
 }
 
+std::string fileManager::getExtension(const std::string& path) const
+{
+   const char *pDot = ::strrchr(path.c_str(),'.');
+   if(pDot == NULL)
+      return "";
+
+   std::string ext(pDot+1);
+   ::strlwr(const_cast<char*>(ext.c_str()));
+   return ext;
+}
+
 iFile& fileManager::_bindFile(const char *fileType, const char *path, closeTypes onClose, const sst::iNodeFactory& nf)
 {
    if(typeid(iSstFile).name() != std::string(fileType))

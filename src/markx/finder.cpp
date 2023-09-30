@@ -6,8 +6,6 @@
 
 void finder::find(const std::string& basePath, std::set<std::string>& paths)
 {
-   cmn::lazyService<console::iLog> pLog;
-
    WIN32_FIND_DATA fData;
    cmn::autoFindHandle hFind;
    hFind.h = ::FindFirstFileA(combine(basePath,m_pattern).c_str(),&fData);
@@ -27,17 +25,10 @@ void finder::find(const std::string& basePath, std::set<std::string>& paths)
       if(fData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       {
          if(m_recursive)
-         {
-            pLog->writeLnVerbose("found folder %s",fullPath.c_str());
-            console::autoIndent _i(*pLog);
             find(fullPath,paths);
-         }
       }
       else
-      {
-         pLog->writeLnVerbose("found file %s",fullPath.c_str());
          paths.insert(fullPath);
-      }
 
    } while(::FindNextFileA(hFind.h,&fData));
 }

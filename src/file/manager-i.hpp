@@ -120,6 +120,7 @@ public:
    virtual void deleteFolderAndContentsIf(const char *path, console::iLog& l, bool really) const;
    virtual bool isFolder(const char *path) const;
    virtual bool doesFileExist(const std::string& path) const;
+   virtual std::string getExtension(const std::string& path) const;
 
    virtual void flushAllOpen();
 

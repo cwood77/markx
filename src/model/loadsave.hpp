@@ -1,6 +1,8 @@
 #ifndef ___model_loadsave_hpp
 #define ___model_loadsave_hpp
 
+#include <string>
+
 namespace model {
 
 class iLoader {

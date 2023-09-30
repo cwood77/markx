@@ -1,6 +1,7 @@
 #ifndef ___model_ast___
 #define ___model_ast___
 
+#include "../cmn/error.hpp"
 #include "attr.hpp"
 #include "service.hpp"
 #include <functional>
@@ -16,6 +17,10 @@ public:
    template<class T> T& addChild() { T *pN = new T(); return addChild<T>(*pN); }
    template<class T> T& addChild(T& n) { _addChild(n); return n; }
    void _addChild(node& n);
+
+   void reparent(node *pOther);
+
+   void destroy() { reparent(NULL); delete this; }
 
    template<class T>
    void forEachChild(std::function<void(T&)> f)
@@ -34,12 +39,17 @@ public:
    bool is(){ return dynamic_cast<T*>(this) != NULL; }
 
    template<class T>
-   T& as(){ return *dynamic_cast<T*>(this); }
+   T *asIf(){ return dynamic_cast<T*>(this); }
+
+   template<class T>
+   T& as(){ return *asIf<T>(this); }
 
 protected:
    node() : m_pParent(NULL) {}
 
 private:
+   void detachChild(node& n);
+
    std::vector<node*> m_children;
    node *m_pParent;
 };

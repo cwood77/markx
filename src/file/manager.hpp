@@ -36,6 +36,7 @@ public:
    virtual void deleteFolderAndContentsIf(const char *path, console::iLog& l, bool really) const = 0;
    virtual bool isFolder(const char *path) const = 0;
    virtual bool doesFileExist(const std::string& path) const = 0;
+   virtual std::string getExtension(const std::string& path) const = 0;
 
    template<class T>
    T& bindFile(pathRoots root,

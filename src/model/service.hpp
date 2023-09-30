@@ -14,6 +14,7 @@ class node;
 
 class iOwnedService {
 public:
+   virtual ~iOwnedService() {}
    virtual void release() = 0;
 };
 
