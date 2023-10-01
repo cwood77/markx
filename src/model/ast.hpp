@@ -30,6 +30,11 @@ public:
    template<class T> T& replaceSelf(T& n) { _replaceSelf(n); return n; }
    void _replaceSelf(node& noob);
 
+   template<class T> T& insertSibling() { T *pN = new T(); return insertSibling<T>(*pN); }
+   template<class T> T& insertSibling(T& n) { _insertSibling(n); return n; }
+   void _insertSibling(node& noob);
+   void insertChildAfter(node& ref, node& noob);
+
    // ------------------------- child access
 
    template<class T>

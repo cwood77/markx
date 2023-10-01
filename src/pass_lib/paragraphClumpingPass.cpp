@@ -12,6 +12,25 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      model::text scratch;
+
+      bool first = true;
+      while(n.hasChildren())
+      {
+         if(!first)
+            scratch.addChild<model::text>(); // blank line terminates paragraphs
+         first = false;
+         auto& p = n.first();
+         while(p.hasChildren())
+         {
+            auto& l = p.first().as<model::text>();
+            l.reparent(&scratch);
+         }
+         p.destroy();
+      }
+
+      while(scratch.hasChildren())
+         scratch.first().reparent(&n);
    }
 };
 

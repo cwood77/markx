@@ -51,6 +51,31 @@ inline void node::_replaceSelf(node& noob)
    destroy();
 }
 
+inline void node::_insertSibling(node& noob)
+{
+   if(!m_pParent)
+      cmn::error(cdwHere,"can't insert sibling when I have no parent")
+         .raise();
+   m_pParent->insertChildAfter(*this,noob);
+}
+
+inline void node::insertChildAfter(node& ref, node& noob)
+{
+   noob.reparent(NULL);
+
+   for(auto it=m_children.begin();it!=m_children.end();++it)
+   {
+      if(*it == &ref)
+      {
+         m_children.insert(++it,&noob);
+         noob.m_pParent = this;
+         return;
+      }
+   }
+
+   throw cmn::error(cdwHere,"can't find supposed child").raise();
+}
+
 inline node *node::next(node& n)
 {
    for(auto it=m_children.begin();it!=m_children.end();++it)

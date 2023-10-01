@@ -12,6 +12,32 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      if(n.demandService<model::iLanguage>().desc() != "markdown")
+      {
+         m_pLog->writeLnVerbose("skipping file in alien language");
+         return;
+      }
+
+      std::set<model::header*> s;
+      n.forEachDescendent<model::header>([&](auto& h){ s.insert(&h); });
+
+      for(auto *pH : s)
+      {
+         auto& num = pH->insertSibling<model::text>();
+         num.text = pH->number;
+
+         auto& text = num.insertSibling<model::text>();
+         text.text = pH->text;
+
+         std::string symbol(pH->level,'#');
+         pH->replaceSelf<model::text>().text = symbol;
+
+         if(num.text.empty())
+            num.destroy();
+
+         if(text.text.empty())
+            text.destroy();
+      }
    }
 };
 

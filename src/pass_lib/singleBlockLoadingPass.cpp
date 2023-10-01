@@ -12,6 +12,11 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      m_pLog->writeLnVerbose("writing to file <%s>",n.path.c_str());
+
+      auto& contents = n.single().as<model::text>().text;
+      cmn::autoCFilePtr file(n.path,"w");
+      ::fwrite(contents.c_str(),contents.length(),1,file.fp);
    }
 };
 

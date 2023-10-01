@@ -12,6 +12,16 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      std::stringstream stream;
+
+      while(n.hasChildren())
+      {
+         auto& l = n.first().as<model::text>();
+         stream << l.text << std::endl;
+         l.destroy();
+      }
+
+      n.addChild<model::text>().text = stream.str();
    }
 };
 

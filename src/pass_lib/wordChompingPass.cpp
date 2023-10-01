@@ -11,6 +11,32 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      n.forEachChild<model::text>([&](auto& p)
+      {
+         p.template forEachChild<model::text>([&](auto& l)
+         {
+            runOnText(l);
+         });
+      });
+   }
+
+private:
+   void runOnText(model::text& l)
+   {
+      std::stringstream text;
+
+      bool first = true;
+      while(l.hasChildren())
+      {
+         auto& w = l.first().as<model::text>();
+         if(!first)
+            text << " ";
+         first = false;
+         text << w.text;
+         w.destroy();
+      }
+
+      l.text = text.str();
    }
 };
 
