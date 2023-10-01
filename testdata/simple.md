@@ -2,15 +2,15 @@
 
 this is a paragraph
 
-## 1 Another heading
+## 1. Another heading
 
 a paragraph with what looks like a # Heading
 
-## 1 Sibling header
+## 2. Sibling header
 
-### 1 Indented
+### 2.1. Indented
 
-## 1 Unindented
+## 3. Unindented
 
-#### 1 Super indented
-#### 1 Super indented
+#### 3.1.1. Super indented
+#### 3.1.2. Super indented
