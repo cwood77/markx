@@ -47,7 +47,7 @@ protected:
          if(s)
          {
             std::string line(pStart,pThumb-pStart);
-            m_pLog->writeLnTemp("found line <%s>",line.c_str());
+            m_pLog->writeLnDebug("found line <%s>",line.c_str());
             n.addChild<model::text>().text = line;
             pStart = pThumb + s;
             pThumb += (s-1);
@@ -57,7 +57,7 @@ protected:
       std::string line(pStart,pThumb-pStart);
       if(!line.empty())
       {
-         m_pLog->writeLnTemp("final line <%s>",line.c_str());
+         m_pLog->writeLnDebug("final line <%s>",line.c_str());
          n.addChild<model::text>().text = line;
       }
 

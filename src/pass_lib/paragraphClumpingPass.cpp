@@ -58,7 +58,7 @@ protected:
             // open a new paragraph if
             if(pPara == NULL)
             {
-               m_pLog->writeLnVerbose(
+               m_pLog->writeLnDebug(
                   "starting new paragraph for line <%s>",l.text.c_str());
                pPara = &scratch.addChild<model::text>();
             }

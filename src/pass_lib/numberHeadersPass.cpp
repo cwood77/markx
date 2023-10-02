@@ -75,7 +75,7 @@ protected:
             N.noNumbers(h.level);
          else
             h.number = N.getNext(h.level);
-         m_pLog->writeLnTemp("assigned number <%s> to header <%s>",
+         m_pLog->writeLnVerbose("assigned number <%s> to header <%s>",
             h.number.c_str(),
             h.text.c_str());
       });

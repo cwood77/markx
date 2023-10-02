@@ -25,7 +25,7 @@ public:
 #ifdef cdwDebugMode
    , m_autoFlush(true), m_prefix(true), m_passFilter(0xFFFF)
 #else
-   , m_autoFlush(true), m_prefix(false), m_passFilter(0x1)
+   , m_autoFlush(true), m_prefix(true), m_passFilter(0x3)
 #endif
    {}
 
@@ -39,8 +39,8 @@ public:
       m_passFilter = d.getOpt<sst::mint>("log:passFilter",0xFFFF);
 #else
       m_autoFlush  = d.getOpt<sst::tf>("log:flush",true);
-      m_prefix     = d.getOpt<sst::tf>("log:prefix",false);
-      m_passFilter = d.getOpt<sst::mint>("log:passFilter",0x1);
+      m_prefix     = d.getOpt<sst::tf>("log:prefix",true);
+      m_passFilter = d.getOpt<sst::mint>("log:passFilter",0x3);
 #endif
    }
 

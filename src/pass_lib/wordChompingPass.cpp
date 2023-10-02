@@ -66,7 +66,7 @@ private:
          if(*pThumb == ' ')
          {
             std::string word(pStart,pThumb-pStart);
-            m_pLog->writeLnTemp("found word <%s>",word.c_str());
+            m_pLog->writeLnDebug("found word <%s>",word.c_str());
             n.addChild<model::text>().text = word;
             pStart = pThumb + 1;
          }
@@ -75,7 +75,7 @@ private:
       std::string word(pStart,pThumb-pStart);
       if(!word.empty())
       {
-         m_pLog->writeLnTemp("final word <%s>",word.c_str());
+         m_pLog->writeLnDebug("final word <%s>",word.c_str());
          n.addChild<model::text>().text = word;
       }
    }

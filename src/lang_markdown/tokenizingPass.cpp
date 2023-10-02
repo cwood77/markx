@@ -70,7 +70,7 @@ private:
          return;
 
       auto& word = l.first().as<model::text>();
-      m_pLog->writeLnTemp("checking word <%s>",word.text.c_str());
+      m_pLog->writeLnDebug("checking word <%s>",word.text.c_str());
 
       bool found = false;
       for(size_t i=1;i<20&&!found;i++)
@@ -84,7 +84,7 @@ private:
    {
       if(n.text == s)
       {
-         m_pLog->writeLnVerbose("found symbol %s",s.c_str());
+         m_pLog->writeLnDebug("found symbol %s",s.c_str());
          auto& h = n.replaceSelf<model::header>();
          h.level = level;
          expandHeader(h);
@@ -113,7 +113,7 @@ private:
             eatTitleWord(h,t);
       }
 
-      m_pLog->writeLnTemp("after expansion, header is <%lld>, <%s>",h.level,h.text.c_str());
+      m_pLog->writeLnVerbose("after expansion, header is <%lld>, <%s>",h.level,h.text.c_str());
    }
 
    bool eatNumbers(model::header& h, model::text& w)
