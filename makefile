@@ -292,6 +292,7 @@ PASSLIB_SRC = \
 	src/pass_lib/numberHeadersPass.cpp \
 	src/pass_lib/paragraphClumpingPass.cpp \
 	src/pass_lib/singleBlockLoadingPass.cpp \
+	src/pass_lib/spaceRemovingPass.cpp \
 	src/pass_lib/wordChompingPass.cpp \
 
 PASSLIB_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(PASSLIB_SRC)))
