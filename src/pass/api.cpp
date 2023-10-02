@@ -112,6 +112,26 @@ tcatExposeTypeAs(passManager,iPassManager);
 
 class passCatalog : public iPassCatalog {
 public:
+   virtual void dump(console::iLog& l)
+   {
+      {
+      console::autoIndent _i(l);
+      tcat::typeSet<iPassInfo> infos;
+      for(size_t i=0;i<infos.size();i++)
+      {
+         std::stringstream msg;
+         msg << infos[i]->desc();
+         if(infos[i]->isTransform())
+            msg << " [T]";
+         if(dynamic_cast<iDecompositionInfo*>(infos[i]))
+            msg << " [D]";
+         l.writeLnInfo(msg.str());
+      }
+      }
+      l.writeLnInfo("T = transform pass");
+      l.writeLnInfo("D = decomposition pass");
+   }
+
    virtual void addAllTransforms(iPassManager& pm)
    {
       tcat::typeSet<iPassInfo> infos;

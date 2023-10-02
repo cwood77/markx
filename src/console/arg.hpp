@@ -1,7 +1,9 @@
 #ifndef ___console_arg___
 #define ___console_arg___
 
+#include <functional>
 #include <list>
+#include <memory>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -122,7 +124,12 @@ public:
    verb(const std::string& tag) : verbBase(*new T(), tag) {}
 };
 
-class iGlobalVerb {
+class iVerbDocs {
+public:
+   virtual void dumpDocs(iLog& l) = 0;
+};
+
+class iGlobalVerb : public iVerbDocs {
 public:
    virtual void program(iCommandLineParser& p) = 0;
    virtual void deflate() = 0;
@@ -137,8 +144,12 @@ public:
    void program(iCommandLineParser& p);
    void deflate();
 
+   void setGlobalDocs(std::function<void(iLog&)> f);
+   void dumpDocs(iLog& l);
+
 private:
    std::list<iGlobalVerb*> m_verbs;
+   std::function<void(iLog&)> m_globalDocs;
 };
 
 class globalVerb : public iGlobalVerb {
@@ -160,6 +171,40 @@ public:
    ~autoVerbs();
 
    void program(iCommandLineParser& p);
+};
+
+class helpCommand : public iCommand {
+public:
+   virtual void run(iLog& l);
+};
+
+class helpVerbs {
+public:
+   explicit helpVerbs(std::function<void(iLog&)> f);
+
+private:
+   class helpVerb : public globalVerb {
+   public:
+      explicit helpVerb(const std::string& token) : m_token(token) {}
+
+      virtual void dumpDocs(iLog& l) {}
+
+   protected:
+      virtual verbBase *inflate()
+      {
+         std::unique_ptr<verbBase> v(
+            new verb<helpCommand>(m_token));
+
+         return v.release();
+      }
+
+   private:
+      std::string m_token;
+   };
+
+   helpVerb m_qmv;
+   helpVerb m_help;
+   helpVerb m_help2;
 };
 
 #include "arg.ipp"

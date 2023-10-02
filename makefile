@@ -193,6 +193,7 @@ $(LANG_MARKDOWN_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 
 MARKX_SRC = \
 	src/markx/finder.cpp \
+	src/markx/help.cpp \
 	src/markx/main.cpp \
 	src/markx/verb.update.cpp \
 

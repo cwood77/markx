@@ -27,6 +27,13 @@ public:
 };
 
 class myVerb : public console::globalVerb {
+public:
+   virtual void dumpDocs(console::iLog& l)
+   {
+      l.writeLnInfo("--update [-r] [in-path] [in-pattern]");
+      l.writeLnInfo("   Update all known files types");
+   }
+
 protected:
    virtual console::verbBase *inflate()
    {

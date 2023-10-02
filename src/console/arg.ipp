@@ -199,6 +199,21 @@ inline void verbsGlobal::deflate()
       (*it)->deflate();
 }
 
+inline void verbsGlobal::setGlobalDocs(std::function<void(iLog&)> f)
+{
+   m_globalDocs = f;
+}
+
+inline void verbsGlobal::dumpDocs(iLog& l)
+{
+   if(m_globalDocs)
+      m_globalDocs(l);
+
+   auto it = m_verbs.begin();
+   for(;it!=m_verbs.end();++it)
+      (*it)->dumpDocs(l);
+}
+
 inline globalVerb::globalVerb()
 : m_pVerb(NULL)
 {
@@ -225,4 +240,17 @@ inline autoVerbs::~autoVerbs()
 inline void autoVerbs::program(iCommandLineParser& p)
 {
    verbsGlobal::get().program(p);
+}
+
+inline void helpCommand::run(iLog& l)
+{
+   verbsGlobal::get().dumpDocs(l);
+}
+
+inline helpVerbs::helpVerbs(std::function<void(iLog&)> f)
+: m_qmv("--?")
+, m_help("--help")
+, m_help2("help")
+{
+   verbsGlobal::get().setGlobalDocs(f);
 }
