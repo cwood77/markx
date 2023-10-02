@@ -73,7 +73,7 @@ private:
       m_pLog->writeLnTemp("checking word <%s>",word.text.c_str());
 
       bool found = false;
-      for(size_t i=0;i<20&&!found;i++)
+      for(size_t i=1;i<20&&!found;i++)
       {
          std::string symbol(i,'#');
          found = mapSymbol(symbol,i,word);

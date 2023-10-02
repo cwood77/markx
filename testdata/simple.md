@@ -8,6 +8,8 @@ a paragraph with what looks like a # Heading
 
 ## 2. Sibling header
 
+  this lines has two leading spaces
+
 ### 2.1. Indented
 
 ## 3. Unindented
