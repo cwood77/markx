@@ -4,6 +4,7 @@
 #include "../cmn/service.hpp"
 #include "../console/log.hpp"
 #include "../model/ast.hpp"
+#include "../model/lang.hpp"
 #include "../pass/api.hpp"
 
 namespace pass {
@@ -27,11 +28,51 @@ public:
    virtual void run()
    {
       cmn::lazyService<model::rootNode> pTree;
-      pTree->forEachChild<model::file>([&](auto& f){ runOnFile(f); });
+      pTree->forEachChild<model::file>([&](auto& f){ _runOnFile(f); });
    }
 
 protected:
+   virtual std::string getReqLang() const { return ""; } // empty means no requirement
+
    virtual void runOnFile(model::file& n) = 0;
+
+private:
+   void _runOnFile(model::file& n)
+   {
+      if(isAlienLanguage(n))
+         return;
+      runOnFile(n);
+   }
+
+   bool isAlienLanguage(model::file& n)
+   {
+      auto l = getReqLang();
+      if(!l.empty() && n.demandService<model::iLanguage>().desc() != l)
+      {
+         m_pLog->writeLnVerbose("skipping file in alien language");
+         return true;
+      }
+      return false;
+   }
+};
+
+class linePassBase : public filePassBase {
+public:
+   explicit linePassBase(const iPassInfo& info) : filePassBase(info) {}
+
+protected:
+   virtual void runOnFile(model::file& n)
+   {
+      n.forEachChild<model::text>([&](auto& p)
+      {
+         p.template forEachChild<model::text>([&](auto& l)
+         {
+            runOnLine(l);
+         });
+      });
+   }
+
+   virtual void runOnLine(model::text& n) = 0;
 };
 
 } // namespace pass

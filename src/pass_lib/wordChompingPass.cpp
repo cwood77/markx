@@ -4,24 +4,12 @@
 namespace pass {
 namespace {
 
-class recomp : public filePassBase {
+class recomp : public linePassBase {
 public:
-   explicit recomp(const iPassInfo& info) : filePassBase(info) {}
+   explicit recomp(const iPassInfo& info) : linePassBase(info) {}
 
 protected:
-   virtual void runOnFile(model::file& n)
-   {
-      n.forEachChild<model::text>([&](auto& p)
-      {
-         p.template forEachChild<model::text>([&](auto& l)
-         {
-            runOnText(l);
-         });
-      });
-   }
-
-private:
-   void runOnText(model::text& l)
+   void runOnLine(model::text& l)
    {
       std::stringstream text;
 
@@ -40,24 +28,12 @@ private:
    }
 };
 
-class decomp : public filePassBase {
+class decomp : public linePassBase {
 public:
-   explicit decomp(const iPassInfo& info) : filePassBase(info) {}
+   explicit decomp(const iPassInfo& info) : linePassBase(info) {}
 
 protected:
-   virtual void runOnFile(model::file& f)
-   {
-      f.forEachChild<model::text>([&](auto& p)
-      {
-         p.template forEachChild<model::text>([&](auto& l)
-         {
-            runOnText(l);
-         });
-      });
-   }
-
-private:
-   void runOnText(model::text& n)
+   void runOnLine(model::text& n)
    {
       const char *pThumb = n.text.c_str();
       const char *pStart = pThumb;

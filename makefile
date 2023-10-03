@@ -160,9 +160,9 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 # lang_markdown
 
 LANG_MARKDOWN_SRC = \
+	src/lang_markdown/headerTokenizingPass.cpp \
 	src/lang_markdown/lang.cpp \
 	src/lang_markdown/main.cpp \
-	src/lang_markdown/tokenizingPass.cpp \
 
 LANG_MARKDOWN_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(LANG_MARKDOWN_SRC)))
 

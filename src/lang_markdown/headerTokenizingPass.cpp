@@ -10,14 +10,10 @@ public:
    explicit recomp(const iPassInfo& info) : filePassBase(info) {}
 
 protected:
+   virtual std::string getReqLang() const { return "markdown"; }
+
    virtual void runOnFile(model::file& n)
    {
-      if(n.demandService<model::iLanguage>().desc() != "markdown")
-      {
-         m_pLog->writeLnVerbose("skipping file in alien language");
-         return;
-      }
-
       std::set<model::header*> s;
       n.forEachDescendent<model::header>([&](auto& h){ s.insert(&h); });
 
@@ -41,30 +37,14 @@ protected:
    }
 };
 
-class decomp : public filePassBase {
+class decomp : public linePassBase {
 public:
-   explicit decomp(const iPassInfo& info) : filePassBase(info) {}
+   explicit decomp(const iPassInfo& info) : linePassBase(info) {}
 
 protected:
-   virtual void runOnFile(model::file& n)
-   {
-      if(n.demandService<model::iLanguage>().desc() != "markdown")
-      {
-         m_pLog->writeLnVerbose("skipping file in alien language");
-         return;
-      }
+   virtual std::string getReqLang() const { return "markdown"; }
 
-      n.forEachChild<model::text>([&](auto& p)
-      {
-         p.template forEachChild<model::text>([&](auto& l)
-         {
-            forEachLine(l);
-         });
-      });
-   }
-
-private:
-   void forEachLine(model::text& l)
+   void runOnLine(model::text& l)
    {
       if(!l.hasChildren())
          return;
@@ -80,6 +60,7 @@ private:
       }
    }
 
+private:
    bool mapSymbol(const std::string& s, size_t level, model::text& n)
    {
       if(n.text == s)
@@ -146,13 +127,13 @@ public:
    virtual iPass& create() const { return *new recomp(*this); }
 };
 
-const char *recompInfo::kDesc = "markdown untokenizing pass";
+const char *recompInfo::kDesc = "markdown header untokenizing pass";
 
 tcatExposeSingletonTypeAs(recompInfo,iPassInfo);
 
 class decompInfo : public iDecompositionInfo {
 public:
-   virtual std::string desc() const { return "markdown tokenizing pass"; }
+   virtual std::string desc() const { return "markdown header tokenizing pass"; }
    virtual state::type getInput() const { return state::kWords; }
    virtual iPass& create() const { return *new decomp(*this); }
    virtual state::type getOutput() const { return state::kTokens; }
