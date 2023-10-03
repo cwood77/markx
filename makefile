@@ -160,6 +160,7 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 # lang_markdown
 
 LANG_MARKDOWN_SRC = \
+	src/lang_markdown/citeTokenizingPass.cpp \
 	src/lang_markdown/headerTokenizingPass.cpp \
 	src/lang_markdown/lang.cpp \
 	src/lang_markdown/main.cpp \
@@ -291,6 +292,7 @@ PASSLIB_SRC = \
 	src/pass_lib/main.cpp \
 	src/pass_lib/numberHeadersPass.cpp \
 	src/pass_lib/paragraphClumpingPass.cpp \
+	src/pass_lib/punctuationPeelingPass.cpp \
 	src/pass_lib/singleBlockLoadingPass.cpp \
 	src/pass_lib/spaceRemovingPass.cpp \
 	src/pass_lib/wordChompingPass.cpp \

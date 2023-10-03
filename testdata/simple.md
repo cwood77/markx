@@ -5,6 +5,7 @@ this is a paragraph
 ## 1. Another heading
 
 a paragraph with what looks like a # Heading
+now a line with a [citation] and [another].
 
 ## 2. Sibling header
 

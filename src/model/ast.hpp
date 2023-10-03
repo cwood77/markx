@@ -84,6 +84,16 @@ public:
 
    node *nextSibling();
 
+   node& parent()
+   {
+      auto *p = parentIf();
+      if(!p)
+         throw cmn::error(cdwHere,"no parent when one is required").raise();
+      return *p;
+   }
+
+   node *parentIf() { return m_pParent; }
+
    // ------------------------- type casts
 
    template<class T>
@@ -126,6 +136,8 @@ public:
    std::string number;
    std::string text;
 };
+
+class cite : public text {};
 
 #include "ast.ipp"
 

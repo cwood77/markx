@@ -1,4 +1,5 @@
 #include "../cmn/error.hpp"
+#include "../cmn/misc.hpp"
 #include "../cmn/service.hpp"
 #include "../console/log.hpp"
 #include "../tcatlib/api.hpp"
@@ -38,9 +39,76 @@ private:
    cmn::lazyService<console::iLog> m_pLog;
 };
 
+class passScheduler {
+public:
+   explicit passScheduler(passSchedule& s) : m_sched(s) {}
+
+   void addToBatch(iPassInfo& p)
+   {
+      m_batchGuids.insert(p.guid());
+      m_batch.push_back(&p);
+   }
+
+   void scheduleBatch() { scheduleBatch([](auto&){}); }
+
+   void scheduleBatch(std::function<void(iPassInfo&)> onSched)
+   {
+      cmn::runawayLoopCheck loop;
+
+      while(m_batch.size())
+      {
+         loop.sanityCheck();
+         for(auto it=m_batch.begin();it!=m_batch.end();++it)
+         {
+            if(satisfied(**it))
+            {
+               onSched(**it);
+               schedule(**it);
+               m_batch.erase(it);
+               break; // restart
+            }
+            else
+               m_pLog->writeLnDebug("deferring schedule of %s because of dep",(*it)->desc().c_str());
+         }
+      }
+   }
+
+private:
+   bool satisfied(iPassInfo& p)
+   {
+      bool satisfied = true;
+      auto deps = p.getDeps();
+      for(auto dep : deps)
+      {
+         if(m_scheduled.find(dep) != m_scheduled.end()) // satisfied
+            continue;
+         if(m_batchGuids.find(dep) != m_batchGuids.end()) // not satisfied, but satisfiable
+            satisfied = false;
+         else
+            cmn::error(cdwHere,"pass dependencies are unsatisifable")
+               .with("pass desc",p.desc())
+               .with("unsatisfiable guid",dep)
+               .raise();
+      }
+      return satisfied;
+   }
+
+   void schedule(iPassInfo& p)
+   {
+      m_sched.schedule(p);
+      m_scheduled.insert(p.guid());
+   }
+
+   passSchedule& m_sched;
+   std::set<std::string> m_scheduled;
+   std::set<std::string> m_batchGuids;
+   std::list<iPassInfo*> m_batch;
+   cmn::lazyService<console::iLog> m_pLog;
+};
+
 class stateManager {
 public:
-   stateManager(iPassCatalog& c, passSchedule& s)
+   stateManager(iPassCatalog& c, passScheduler& s)
    : m_catalog(c)
    , m_sched(s)
    , m_currentState(state::kEmpty)
@@ -55,10 +123,11 @@ public:
       {
          auto decomps = m_catalog.demand(m_currentState,m_currentState+1);
          for(auto *pD : decomps)
+            m_sched.addToBatch(*pD);
+         m_sched.scheduleBatch([&](auto &d)
          {
-            m_sched.schedule(*pD);
-            m_inversions.push_front(pD->inverseGuid());
-         }
+            m_inversions.push_front(dynamic_cast<iDecompositionInfo&>(d).inverseGuid());
+         });
       }
    }
 
@@ -67,13 +136,14 @@ public:
       for(auto& guid : m_inversions)
       {
          auto& r = m_catalog.demand(guid);
-         m_sched.schedule(r);
+         m_sched.addToBatch(r);
       }
+      m_sched.scheduleBatch();
    }
 
 private:
    iPassCatalog& m_catalog;
-   passSchedule& m_sched;
+   passScheduler& m_sched;
    state::type m_currentState;
    std::list<std::string> m_inversions;
 };
@@ -89,13 +159,15 @@ public:
    virtual iPassSchedule& compile(iPassCatalog& c)
    {
       std::unique_ptr<passSchedule> pSched(new passSchedule());
-      stateManager sm(c,*pSched);
+      passScheduler scheduler(*pSched);
+      stateManager sm(c,scheduler);
 
       for(auto it=m_pInfos.begin();it!=m_pInfos.end();++it)
       {
          sm.decomposeTo(it->first);
          for(auto jit=it->second.begin();jit!=it->second.end();++jit)
-            pSched->schedule(**jit);
+            scheduler.addToBatch(**jit);
+         scheduler.scheduleBatch();
       }
 
       sm.recompose();

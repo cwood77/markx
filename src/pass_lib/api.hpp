@@ -75,6 +75,22 @@ protected:
    virtual void runOnLine(model::text& n) = 0;
 };
 
+class wordPassBase : public linePassBase {
+public:
+   explicit wordPassBase(const iPassInfo& info) : linePassBase(info) {}
+
+protected:
+   virtual void runOnLine(model::text& n)
+   {
+      n.forEachChild<model::text>([&](auto& w)
+      {
+         runOnWord(w);
+      });
+   }
+
+   virtual void runOnWord(model::text& n) = 0;
+};
+
 } // namespace pass
 
 #endif // ___passlib_api___

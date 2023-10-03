@@ -1,7 +1,9 @@
 #ifndef ___pass_api___
 #define ___pass_api___
 
+#include <functional>
 #include <list>
+#include <set>
 #include <string>
 
 namespace pass {
@@ -26,6 +28,7 @@ public:
    virtual std::string guid() const { return desc(); }
    virtual std::string desc() const = 0;
    virtual state::type getInput() const = 0;
+   virtual std::set<std::string> getDeps() const { return std::set<std::string>(); }
    virtual bool isTransform() const { return false; }
    virtual iPass& create() const = 0;
 };
