@@ -1,0 +1,24 @@
+A new cdw markup language.  How would that work?
+
+Today, files are read, edited, then written (update operation).  A *transform* is significantly different in that a different language is written out, and maybe with a different file format.
+
+Linguistic concepts (i.e. model changes) for UPDATE:
+- TOC **
+  - TOC formatting
+- citations **
+  - formatting
+
+Linguistic concepts (i.e. model changes) for TRANSFORM:
+- #include for HTML script
+- boldface
+- italics
+- tables
+  - formatting
+- ordered lists
+- unordered lists
+- images
+  - formatting
+- designer notes **
+  - formatting
+
+** Since markdown can't handle comments, these are sensitive in parsing.  Maybe programmable/customizable

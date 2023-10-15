@@ -11,17 +11,78 @@ public:
 protected:
    void runOnLine(model::text& l)
    {
+      std::list<model::glue*> glue;
+      l.forEachChild<model::glue>([&](auto& g){ glue.push_back(&g); });
+
+      for(auto *pG : glue)
+      {
+         auto *pLeft = pG->prevSibling();
+         auto *pRight = pG->nextSibling();
+         if(!pLeft || !pRight)
+            cmn::error(cdwHere,"How is it possible to have glue without left and right?")
+               .raise();
+
+         pG->destroy();
+
+         pLeft->as<model::text>().text += pRight->as<model::text>().text;
+         pRight->destroy();
+
+         m_pLog->writeLnTemp("resolved glue -> <%s>",pLeft->as<model::text>().text.c_str());
+      }
    }
 };
 
-class decomp : public wordPassBase {
+class decomp : public linePassBase {
 public:
-   explicit decomp(const iPassInfo& info) : wordPassBase(info) {}
+   explicit decomp(const iPassInfo& info) : linePassBase(info)
+   {
+      // build set of punctuation to peel
+      m_punt.insert('.');
+      m_punt.insert('?');
+      m_punt.insert('!');
+   }
 
 protected:
-   void runOnWord(model::text& n)
+   void runOnLine(model::text& n)
    {
+      if(!n.hasChildren())
+         return;
+
+      auto *pN = &n.first();
+      while(pN)
+      {
+         auto& t = pN->as<model::text>();
+         checkWord(t);
+         pN = pN->nextSibling();
+      }
    }
+
+private:
+   void checkWord(model::text& w)
+   {
+      if(w.text.length() == 0)
+         return;
+      if(w.text.length() == 1)
+         return;
+
+      auto c = w.text.c_str()[w.text.length()-1];
+      if(m_punt.find(c) == m_punt.end())
+         return;
+
+      m_pLog->writeLnTemp("peeling punct off word <%s>",w.text.c_str());
+
+      // edit word
+      w.text = std::string(w.text.c_str(),w.text.length()-1);
+
+      // add glue
+      auto& g = w.insertSibling<model::glue>();
+
+      // add punct
+      auto& p = g.insertSibling<model::text>();
+      p.text = std::string(1,c);
+   }
+
+   std::set<char> m_punt;
 };
 
 class recompInfo : public iPassInfo {

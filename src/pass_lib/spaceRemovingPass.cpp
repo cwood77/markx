@@ -4,48 +4,37 @@
 namespace pass {
 namespace {
 
-class pass : public filePassBase {
+class pass : public linePassBase {
 public:
-   explicit pass(const iPassInfo& info) : filePassBase(info) {}
+   explicit pass(const iPassInfo& info) : linePassBase(info) {}
 
 protected:
-   virtual void runOnFile(model::file& f)
-   {
-      f.forEachChild<model::node>([&](auto& p)
-      {
-         p.template forEachChild<model::text>([&](auto& l)
-         {
-            handleLine(l);
-         });
-      });
-   }
-
-private:
-   void handleLine(model::text& l)
+   virtual void runOnLine(model::text& l)
    {
       if(!l.hasChildren())
          return;
 
       auto *pWord = &l.first();
-      int i = 1;
 
       bool sawNonSpaces = false;
       while(pWord)
       {
-         auto& word = pWord->as<model::text>();
-         bool kill = (sawNonSpaces && word.text.empty());
+         bool kill = false;
 
-         if(!kill && !sawNonSpaces)
-            sawNonSpaces = !word.text.empty();
+         auto& t = pWord->as<model::text>();
+         if(!pWord->is<model::glue>())
+         {
+            kill = (sawNonSpaces && t.text.empty());
+            if(!kill && !sawNonSpaces)
+               sawNonSpaces = !t.text.empty();
+         }
 
          pWord = pWord->nextSibling();
          if(kill)
          {
-            m_pLog->writeLnVerbose("cutting redundant whitespace--word %d--from line <%s>",i,l.text.c_str());
-            word.destroy();
+            m_pLog->writeLnVerbose("cutting redundant whitespace from line <%s>",l.text.c_str());
+            t.destroy();
          }
-         else
-            i++;
       }
    }
 };

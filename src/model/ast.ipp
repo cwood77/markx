@@ -100,3 +100,25 @@ inline node *node::nextSibling()
          .raise();
    return m_pParent->next(*this);
 }
+
+inline node *node::prev(node& n)
+{
+   node *pPrev = NULL;
+   for(auto it=m_children.begin();it!=m_children.end();++it)
+   {
+      if(*it == &n)
+         return pPrev;
+      else
+         pPrev = *it;
+   }
+
+   throw cmn::error(cdwHere,"can't find supposed child").raise();
+}
+
+inline node *node::prevSibling()
+{
+   if(!m_pParent)
+      cmn::error(cdwHere,"can't get siblings if I have no parent")
+         .raise();
+   return m_pParent->prev(*this);
+}

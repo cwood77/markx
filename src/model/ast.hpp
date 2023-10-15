@@ -80,9 +80,13 @@ public:
 
    bool hasChildren() const { return m_children.size() > 0; }
 
-   node *next(node& n);
+   node *next(node& n); // next child
 
    node *nextSibling();
+
+   node *prev(node& n); // prev child
+
+   node *prevSibling();
 
    node& parent()
    {
@@ -113,8 +117,9 @@ private:
    node *m_pParent;
 };
 
-class rootNode : public node {
-};
+// ========================= fundamental node types
+
+class rootNode : public node {};
 
 class file : public node {
 public:
@@ -123,18 +128,23 @@ public:
    std::string path;
 };
 
+// ========================= text
+
 class text : public node {
 public:
    std::string text;
 };
 
-class header : public node {
+class glue : public text {};
+
+// ========================= constructs
+
+class header : public text {
 public:
    header() : level(0) {}
 
    size_t level;
    std::string number;
-   std::string text;
 };
 
 class cite : public text {};

@@ -226,8 +226,9 @@ $(MARKX_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 # model
 
 MODEL_SRC = \
-	src/model/loadsave.cpp \
 	src/model/main.cpp \
+	src/model/numeric.cpp \
+	src/model/phrase.cpp \
 
 MODEL_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(MODEL_SRC)))
 

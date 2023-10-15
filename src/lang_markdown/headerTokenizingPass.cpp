@@ -1,4 +1,5 @@
 #include "../model/lang.hpp"
+#include "../model/textServices.hpp"
 #include "../pass_lib/api.hpp"
 #include "../tcatlib/api.hpp"
 
@@ -91,7 +92,7 @@ private:
             handled = foundNumbers;
          }
          if(!handled)
-            eatTitleWord(h,t);
+            h.demandService<model::iPhrase>().combine(*pNext,/*destroy*/true);
       }
 
       m_pLog->writeLnVerbose("after expansion, header is <%lld>, <%s>",h.level,h.text.c_str());
@@ -99,22 +100,32 @@ private:
 
    bool eatNumbers(model::header& h, model::text& w)
    {
-      const char *pThumb = w.text.c_str();
-      for(;*pThumb!=0;pThumb++)
-         if(!::isdigit(*pThumb) && *pThumb!='.')
-            return false;
+      if(!w.demandService<model::iNumeric>().isNumeric())
+         return false;
 
       h.number = w.text;
+
+      eatNumericPeriodIf(w);
+
       w.destroy();
       return true;
    }
 
-   void eatTitleWord(model::header& h, model::text& w)
+   void eatNumericPeriodIf(model::text& w)
    {
-      if(!h.text.empty())
-         h.text += " ";
-      h.text += w.text;
-      w.destroy();
+      auto *pG = w.nextSibling()->asIf<model::glue>();
+      if(!pG)
+         return;
+
+      auto& p = pG->nextSibling()->as<model::text>();
+      if(p.text == ".")
+      {
+         p.destroy();
+         pG->destroy();
+      }
+      else
+         cmn::error(cdwHere,"found glue but don't understand next node?")
+            .raise();
    }
 };
 

@@ -1,3 +1,4 @@
+#include "../model/textServices.hpp"
 #include "../tcatlib/api.hpp"
 #include "api.hpp"
 
@@ -11,20 +12,7 @@ public:
 protected:
    void runOnLine(model::text& l)
    {
-      std::stringstream text;
-
-      bool first = true;
-      while(l.hasChildren())
-      {
-         auto& w = l.first().as<model::text>();
-         if(!first)
-            text << " ";
-         first = false;
-         text << w.text;
-         w.destroy();
-      }
-
-      l.text = text.str();
+      l.demandService<model::iPhrase>().combineAndDestroyAll();
    }
 };
 
