@@ -40,6 +40,7 @@ public:
       delete [] m_pPtr;
       m_size = n;
       m_pPtr = new char [m_size];
+      ::memset(m_pPtr,0,m_size);
    }
 
    template<class T>

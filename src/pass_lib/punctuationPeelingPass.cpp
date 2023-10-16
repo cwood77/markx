@@ -106,6 +106,7 @@ public:
    {
       std::set<std::string> deps;
       deps.insert("word chomping pass");
+      deps.insert("punctuation splitting pass");
       return deps;
    }
    virtual iPass& create() const { return *new decomp(*this); }
