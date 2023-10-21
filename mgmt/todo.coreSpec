@@ -4,3 +4,4 @@ rule: unique:title
 rule: unique:id
 
 rule: enum:state=new,in-work,done,deferred
+rule: enum:milestone=new,eto-markdown,eto-html
