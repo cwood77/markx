@@ -22,6 +22,10 @@ public:
    template<class T> T& addChild(T& n) { _addChild(n); return n; }
    void _addChild(node& n);
 
+   template<class T> T& prependChild() { T *pN = new T(); return prependChild<T>(*pN); }
+   template<class T> T& prependChild(T& n) { _prependChild(n); return n; }
+   void _prependChild(node& n);
+
    void reparent(node *pOther);
 
    void replaceChild(node& old, node *pNoob);
@@ -146,6 +150,8 @@ public:
    size_t level;
    std::string number;
 };
+
+class toc : public text {};
 
 class cite : public text {};
 

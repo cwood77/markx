@@ -164,6 +164,7 @@ LANG_MARKDOWN_SRC = \
 	src/lang_markdown/headerTokenizingPass.cpp \
 	src/lang_markdown/lang.cpp \
 	src/lang_markdown/main.cpp \
+	src/lang_markdown/tocTokenizingPass.cpp \
 
 LANG_MARKDOWN_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(LANG_MARKDOWN_SRC)))
 
@@ -297,6 +298,7 @@ PASSLIB_SRC = \
 	src/pass_lib/punctuationSplittingPass.cpp \
 	src/pass_lib/singleBlockLoadingPass.cpp \
 	src/pass_lib/spaceRemovingPass.cpp \
+	src/pass_lib/tocCalculationPass.cpp \
 	src/pass_lib/wordChompingPass.cpp \
 
 PASSLIB_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(PASSLIB_SRC)))

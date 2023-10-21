@@ -10,6 +10,12 @@ inline void node::_addChild(node& n)
    n.m_pParent = this;
 }
 
+inline void node::_prependChild(node& n)
+{
+   m_children.insert(m_children.begin(),&n);
+   n.m_pParent = this;
+}
+
 inline void node::reparent(node *pOther)
 {
    if(m_pParent)
@@ -48,6 +54,10 @@ inline void node::_replaceSelf(node& noob)
       cmn::error(cdwHere,"can't replace myself when I have no parent")
          .raise();
    m_pParent->replaceChild(*this,&noob);
+
+   while(hasChildren())
+      first().reparent(&noob);
+
    destroy();
 }
 

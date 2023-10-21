@@ -2,6 +2,8 @@
 
 this is a paragraph
 
+Table of Contents
+
 ## 1. Another heading
 
 a paragraph with what looks like a # Heading
