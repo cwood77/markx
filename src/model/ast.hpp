@@ -143,18 +143,24 @@ class glue : public text {};
 
 // ========================= constructs
 
-class header : public text {
+class sectionBase : public text {
+public:
+   std::string number;
+};
+
+class header : public sectionBase {
 public:
    header() : level(0) {}
 
    size_t level;
-   std::string number;
 };
 
 class toc : public text {
 public:
    std::map<std::string,std::string> entries;
 };
+
+class sectionRef : public sectionBase {};
 
 class cite : public text {};
 

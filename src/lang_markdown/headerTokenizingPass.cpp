@@ -69,63 +69,10 @@ private:
          m_pLog->writeLnDebug("found symbol %s",s.c_str());
          auto& h = n.replaceSelf<model::header>();
          h.level = level;
-         expandHeader(h);
+         h.demandService<model::iSectionRef>().expand();
          return true;
       }
       return false;
-   }
-
-   void expandHeader(model::header& h)
-   {
-      bool foundNumbers = false;
-      while(true)
-      {
-         auto *pNext = h.nextSibling();
-         if(!pNext)
-            break;
-
-         auto& t = pNext->as<model::text>();
-         bool handled = false;
-         if(!foundNumbers)
-         {
-            foundNumbers = eatNumbers(h,t);
-            handled = foundNumbers;
-         }
-         if(!handled)
-            h.demandService<model::iPhrase>().combine(*pNext,/*destroy*/true);
-      }
-
-      m_pLog->writeLnVerbose("after expansion, header is <%lld>, <%s>",h.level,h.text.c_str());
-   }
-
-   bool eatNumbers(model::header& h, model::text& w)
-   {
-      if(!w.demandService<model::iNumeric>().isNumeric())
-         return false;
-
-      h.number = w.text;
-
-      eatNumericPeriodIf(w);
-
-      w.destroy();
-      return true;
-   }
-
-   void eatNumericPeriodIf(model::text& w)
-   {
-      auto *pG = w.nextSibling()->asIf<model::glue>();
-      if(!pG)
-         return;
-
-      auto& p = pG->nextSibling()->as<model::text>();
-      if(p.text == ".")
-      {
-         p.destroy();
-         pG->destroy();
-      }
-      else
-         cmn::error(cdwHere,"found glue but don't understand next node?")
-            .raise();
    }
 };
 

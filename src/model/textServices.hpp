@@ -18,6 +18,11 @@ public:
    virtual void combineAndDestroyAll() = 0;
 };
 
+class iSectionRef {
+public:
+   virtual void expand() = 0;
+};
+
 } // namespace model
 
 #endif // ___model_textServices___

@@ -1,6 +1,5 @@
 #include "../tcatlib/api.hpp"
 #include "api.hpp"
-#include <sstream>
 
 namespace pass {
 namespace {
