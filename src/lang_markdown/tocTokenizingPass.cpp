@@ -38,7 +38,7 @@ private:
 
    void addSentinelLine(model::node& n)
    {
-      auto& l = n.addChild<model::text>();
+      auto& l = n.prependChild<model::text>();
       l.addChild<model::text>().text = "Table";
       l.addChild<model::text>().text = "of";
       l.addChild<model::text>().text = "Contents";
