@@ -12,6 +12,25 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      std::list<model::toc*> tocs;
+      n.forEachDescendent<model::toc>([&](auto& t){ tocs.push_back(&t); });
+      if(tocs.size() == 0)
+         return;
+
+      std::list<model::header*> headers;
+      n.forEachDescendent<model::header>([&](auto& h){ headers.push_back(&h); });
+
+      for(auto *pToc : tocs)
+      {
+         // delete the old text
+         while(pToc->hasChildren())
+            pToc->first().destroy();
+
+         // link headers
+         for(auto *pHeader : headers)
+            if(!pHeader->number.empty())
+               pToc->entries[pHeader->number] = pHeader->text;
+      }
    }
 };
 

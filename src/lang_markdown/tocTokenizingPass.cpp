@@ -15,14 +15,33 @@ protected:
 
    virtual void runOnFile(model::file& n)
    {
-      n.forEachDescendent<model::toc>([](auto& t)
+      n.forEachDescendent<model::toc>([&](auto& t)
       {
-         auto& p = t.template replaceSelf<model::text>();
-         auto& l = p.template prependChild<model::text>();
-         l.template addChild<model::text>().text = "Table";
-         l.template addChild<model::text>().text = "of";
-         l.template addChild<model::text>().text = "Contents";
+         handleToc(t);
       });
+   }
+
+private:
+   void handleToc(model::toc& t)
+   {
+      addSentinelLine(t);
+
+      for(auto it=t.entries.begin();it!=t.entries.end();++it)
+      {
+         auto& l = t.addChild<model::text>();
+         l.addChild<model::text>().text = it->first;
+         l.addChild<model::text>().text = it->second;
+      }
+
+      t.replaceSelf<model::text>();
+   }
+
+   void addSentinelLine(model::node& n)
+   {
+      auto& l = n.addChild<model::text>();
+      l.addChild<model::text>().text = "Table";
+      l.addChild<model::text>().text = "of";
+      l.addChild<model::text>().text = "Contents";
    }
 };
 

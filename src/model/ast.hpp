@@ -151,7 +151,10 @@ public:
    std::string number;
 };
 
-class toc : public text {};
+class toc : public text {
+public:
+   std::map<std::string,std::string> entries;
+};
 
 class cite : public text {};
 
