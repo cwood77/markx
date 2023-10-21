@@ -1,0 +1,6 @@
+key: id
+
+rule: unique:title
+rule: unique:id
+
+rule: enum:state=new,in-work,done,deferred

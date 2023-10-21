@@ -1,0 +1,9 @@
+type: diff
+inherit: todo.coreSpec
+cols: title,id,state,notes,priority
+
+rule: default<guid>:id
+rule: default:state=new
+
+filter: .state "done" == !
+rule: sort:priority,title
