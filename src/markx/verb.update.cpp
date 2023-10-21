@@ -16,9 +16,10 @@ namespace {
 
 class command : public console::iCommand {
 public:
-   command() : oRecursive(false), oInFilePattern("*") {}
+   command() : oRecursive(false), oStrict(false), oInFilePattern("*") {}
 
    bool oRecursive;
+   bool oStrict;
    std::string oInFilePath;
    std::string oInFilePattern;
 
@@ -29,8 +30,9 @@ class myVerb : public console::globalVerb {
 public:
    virtual void dumpDocs(console::iLog& l)
    {
-      l.writeLnInfo("--update [-r] [in-path] [in-pattern]");
+      l.writeLnInfo("--update [-r] [-s] [in-path] [in-pattern]");
       l.writeLnInfo("   Update all known files types");
+      l.writeLnInfo("     Use -s (strict) to skip Chris's custom transforms");
    }
 
 protected:
@@ -41,6 +43,8 @@ protected:
 
       v->addOption(
          *new console::boolOption("-r",offsetof(command,oRecursive)));
+      v->addOption(
+         *new console::boolOption("-s",offsetof(command,oStrict)));
       v->addParameter(
          console::stringParameter::optional(offsetof(command,oInFilePath)));
       v->addParameter(
@@ -105,7 +109,7 @@ void command::run(console::iLog& l)
    {
       tcat::typePtr<pass::iPassManager> pm;
       tcat::typePtr<pass::iPassCatalog> pc;
-      pc->addAllTransforms(*pm);
+      pc->addAllTransforms(*pm,oStrict);
       pSched.reset(&pm->compile(*pc));
    }
 

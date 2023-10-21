@@ -5,8 +5,8 @@ state: new
 notes: 
 milestone: eto-markdown
 priority: 
-depsOn-undone: b2a73d9b-0d26-44d9-a818bef3
-depsOn-done: 
+depsOn-undone: 
+depsOn-done: b2a73d9b-0d26-44d9-a818bef3
 
 ---------------------------
 title: TOC references
@@ -15,13 +15,13 @@ state: new
 notes: 
 milestone: eto-markdown
 priority: 
-depsOn-undone: b2a73d9b-0d26-44d9-a818bef3
-depsOn-done: 
+depsOn-undone: 
+depsOn-done: b2a73d9b-0d26-44d9-a818bef3
 
 ---------------------------
 title: switch to opt-out of sensitive transforms
 id: b2a73d9b-0d26-44d9-a818bef3
-state: new
+state: done
 notes: 
 milestone: eto-markdown
 priority: 

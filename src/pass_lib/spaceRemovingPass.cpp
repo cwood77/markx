@@ -44,6 +44,7 @@ public:
    virtual std::string desc() const { return "space removing pass"; }
    virtual state::type getInput() const { return state::kWords; }
    virtual bool isTransform() const { return true; }
+   virtual bool isStrictTransform() const { return true; }
    virtual iPass& create() const { return *new pass(*this); }
 };
 

@@ -193,22 +193,28 @@ public:
       {
          std::stringstream msg;
          msg << infos[i]->desc();
-         if(infos[i]->isTransform())
+         if(infos[i]->isStrictTransform())
             msg << " [T]";
+         else if(infos[i]->isTransform())
+            msg << " [T*]";
          if(dynamic_cast<iDecompositionInfo*>(infos[i]))
             msg << " [D]";
          l.writeLnInfo(msg.str());
       }
       }
-      l.writeLnInfo("T = transform pass");
-      l.writeLnInfo("D = decomposition pass");
+      l.writeLnInfo("T  = strict transform pass");
+      l.writeLnInfo("T* = non-strict transform pass");
+      l.writeLnInfo("D  = decomposition pass");
    }
 
-   virtual void addAllTransforms(iPassManager& pm)
+   virtual void addAllTransforms(iPassManager& pm, bool strict)
    {
       tcat::typeSet<iPassInfo> infos;
       for(size_t i=0;i<infos.size();i++)
-         if(infos[i]->isTransform())
+         if(
+            (strict && infos[i]->isStrictTransform()) ||
+            (!strict && infos[i]->isTransform())
+         )
             pm.add(*infos[i]);
    }
 
