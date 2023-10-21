@@ -6,5 +6,5 @@ rule: default<guid>:id
 rule: default:state=new
 rule: default:milestone=new
 
-filter: .state "done" == !
-rule: sort:priority,title
+filter: .state "done" == ! .milestone "eto-markdown" == &&
+rule: sort:depsOn-undone,priority,title
