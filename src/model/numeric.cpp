@@ -14,6 +14,9 @@ public:
 
    virtual bool isNumeric() const
    {
+      if(m_node.text.length()==0)
+         return false;
+
       const char *pThumb = m_node.text.c_str();
       for(;*pThumb!=0;pThumb++)
          if(!::isdigit(*pThumb) && *pThumb!='.')

@@ -14,7 +14,7 @@ public:
 
    virtual void release() { delete this; }
 
-   virtual void expand()
+   virtual void expand(bool wholeLine)
    {
       bool foundNumbers = false;
       while(true)
@@ -31,7 +31,14 @@ public:
             handled = foundNumbers;
          }
          if(!handled)
+         {
+            if(!wholeLine)
+            {
+               if(pNext->asIf<model::glue>())
+                  break; // stop at period
+            }
             m_node.demandService<model::iPhrase>().combine(*pNext,/*destroy*/true);
+         }
       }
 
       m_pLog->writeLnVerbose("after expansion, sectionBase is <%s>",m_node.text.c_str());

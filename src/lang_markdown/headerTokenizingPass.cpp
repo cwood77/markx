@@ -69,7 +69,7 @@ private:
          m_pLog->writeLnDebug("found symbol %s",s.c_str());
          auto& h = n.replaceSelf<model::header>();
          h.level = level;
-         h.demandService<model::iSectionRef>().expand();
+         h.demandService<model::iSectionRef>().expand(/*wholeLine*/true);
          return true;
       }
       return false;

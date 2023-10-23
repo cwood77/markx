@@ -20,7 +20,7 @@ public:
 
 class iSectionRef {
 public:
-   virtual void expand() = 0;
+   virtual void expand(bool wholeLine) = 0;
 };
 
 } // namespace model

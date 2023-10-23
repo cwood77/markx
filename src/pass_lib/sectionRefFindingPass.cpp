@@ -1,28 +1,59 @@
+#include "../model/textServices.hpp"
 #include "../tcatlib/api.hpp"
 #include "api.hpp"
 
 namespace pass {
 namespace {
 
-class recomp : public linePassBase {
+class recomp : public filePassBase {
 public:
-   explicit recomp(const iPassInfo& info) : linePassBase(info) {}
+   explicit recomp(const iPassInfo& info) : filePassBase(info) {}
 
 protected:
-   void runOnLine(model::text& l)
+   void runOnFile(model::file& f)
    {
+      std::list<model::sectionRef*> refs;
+      f.forEachDescendent<model::sectionRef>([&](auto& s)
+      {
+         refs.push_back(&s);
+      });
+
+      for(auto *pRef : refs)
+      {
+         auto& n = pRef->insertSibling<model::text>();
+         n.text = pRef->number;
+
+         auto& t = n.insertSibling<model::text>();
+         t.text = pRef->text;
+
+         auto& x = pRef->replaceSelf<model::text>();
+         x.text = "section";
+      }
    }
 };
 
 class decomp : public linePassBase {
 public:
-   explicit decomp(const iPassInfo& info) : linePassBase(info)
-   {
-   }
+   explicit decomp(const iPassInfo& info) : linePassBase(info) {}
 
 protected:
-   void runOnLine(model::text& n)
+   void runOnLine(model::text& l)
    {
+      if(!l.hasChildren())
+         return;
+
+      auto *pWord = &l.first();
+      while(pWord)
+      {
+         auto *pText = pWord->asIf<model::text>();
+         if(pText && pText->text == "section")
+         {
+            auto& s = pText->replaceSelf<model::sectionRef>();
+            s.demandService<model::iSectionRef>().expand(/*wholeLine*/false);
+            pWord = &s;
+         }
+         pWord = pWord->nextSibling();
+      }
    }
 };
 
