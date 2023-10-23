@@ -130,7 +130,7 @@ depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 ---------------------------
 title: HTML line endings
 id: 05c00020-e5ab-4a1f-85066da3
-state: new
+state: done
 notes: 
 milestone: eto-html
 priority: 1
@@ -144,6 +144,16 @@ state: new
 notes: 
 milestone: eto-html
 priority: 2
+depsOn-undone: 
+depsOn-done: 
+
+---------------------------
+title: HTML TOC render
+id: 703ad828-ff7a-4ce1-9486d2dc
+state: new
+notes: 
+milestone: eto-html
+priority: 9
 depsOn-undone: 
 depsOn-done: 
 

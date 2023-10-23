@@ -67,7 +67,7 @@ public:
    static const char *kDesc;
 
    virtual std::string desc() const { return kDesc; }
-   virtual state::type getInput() const { return state::kPrepTranslate; }
+   virtual state::type getInput() const { return state::kTranslate; }
    virtual iPass& create() const { return *new recomp(*this); }
 };
 
@@ -80,7 +80,7 @@ public:
    virtual std::string desc() const { return "html style tokenizing pass"; }
    virtual state::type getInput() const { return state::kTokens; }
    virtual iPass& create() const { return *new decomp(*this); }
-   virtual state::type getOutput() const { return state::kPrepTranslate; }
+   virtual state::type getOutput() const { return state::kTranslate; }
    virtual std::string inverseGuid() const { return recompInfo::kDesc; }
 };
 
