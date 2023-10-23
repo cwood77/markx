@@ -22,7 +22,7 @@ now a line with a [citation] and [another].
 ### 2.1. Indented
 
 ## 3. Unindented
-This is a reference to section Sibling header. See also section Another heading.
+This is a reference to section 2. Sibling header. See also section 1. Another heading.
 
 #### 3.1.1. Super indented
 #### 3.1.2. Super indented
