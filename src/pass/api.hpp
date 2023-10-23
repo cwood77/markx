@@ -16,8 +16,8 @@ namespace state {
       kParagraphs,
       kWords,
       kTokens,
-      kPrepTranslate, // smaller bits in prep for translation
-      kTranslate
+      kPrepTranslate//, // smaller bits in prep for translation
+      //kTranslate
    };
    typedef size_t type;
 }

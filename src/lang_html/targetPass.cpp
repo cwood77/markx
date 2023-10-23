@@ -35,7 +35,7 @@ protected:
 class passInfo : public iTranslationInfo {
 public:
    virtual std::string desc() const { return "HTML target pass"; }
-   virtual state::type getInput() const { return state::kTranslate; }
+   virtual state::type getInput() const { return state::kPrepTranslate; }
    virtual iPass& create() const { return *new pass(*this); }
    virtual std::string destination() const { return "html"; }
 };
