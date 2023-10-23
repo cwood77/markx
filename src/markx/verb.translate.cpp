@@ -9,9 +9,7 @@ namespace {
 
 class command : public compileCommand {
 public:
-   command() : oStrict(false) {}
-
-   bool oStrict;
+   std::string oDest;
 
 protected:
    virtual pass::iPassSchedule& compile(pass::iPassManager& pm, pass::iPassCatalog& pc);
@@ -21,21 +19,20 @@ class myVerb : public console::globalVerb {
 public:
    virtual void dumpDocs(console::iLog& l)
    {
-      l.writeLnInfo("--update [-r] [-s] [in-path] [in-pattern]");
-      l.writeLnInfo("   Update all known files types");
-      l.writeLnInfo("     Use -s (strict) to skip Chris's custom transforms");
+      l.writeLnInfo("--translate [-r] <dest> [in-path] [in-pattern]");
+      l.writeLnInfo("   Translate all known files types to type <dest>");
    }
 
 protected:
    virtual console::verbBase *inflate()
    {
       std::unique_ptr<console::verbBase> v(
-         new console::verb<command>("--update"));
+         new console::verb<command>("--translate"));
 
       v->addOption(
          *new console::boolOption("-r",offsetof(command,oRecursive)));
-      v->addOption(
-         *new console::boolOption("-s",offsetof(command,oStrict)));
+      v->addParameter(
+         console::stringParameter::required(offsetof(command,oDest)));
       v->addParameter(
          console::stringParameter::optional(offsetof(command,oInFilePath)));
       v->addParameter(
@@ -47,8 +44,9 @@ protected:
 
 pass::iPassSchedule& command::compile(pass::iPassManager& pm, pass::iPassCatalog& pc)
 {
-   pc.addAllTransforms(pm,oStrict);
-   return pm.compileUpdate(pc);
+   pc.translateTo(pm,oDest);
+   return pm.compileUpdate(pc); // TODO HACK - continue to use statemanager to recombine stuff!
+                                //             take out compileTranslate if this stays like this
 }
 
 } // anonymous namespace

@@ -141,7 +141,7 @@ public:
 
 class glue : public text {};
 
-// ========================= constructs
+// ========================= sectioning
 
 class sectionBase : public text {
 public:
@@ -161,6 +161,19 @@ public:
 };
 
 class sectionRef : public sectionBase {};
+
+// ========================= formatting
+
+class style : public text {
+public:
+   style() : kind(kBold), start(true) {}
+
+   enum kinds {
+      kBold,
+      kItalic,
+   } kind;
+   bool start;
+};
 
 class cite : public text {};
 

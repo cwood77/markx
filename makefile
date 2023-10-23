@@ -11,6 +11,7 @@ all: \
 	$(OUT_DIR)/debug/console.dll \
 	$(OUT_DIR)/debug/file.dll \
 	$(OUT_DIR)/debug/file.test.dll \
+	$(OUT_DIR)/debug/lang_html.dll \
 	$(OUT_DIR)/debug/lang_markdown.dll \
 	$(OUT_DIR)/debug/markx.exe \
 	$(OUT_DIR)/debug/model.dll \
@@ -21,6 +22,7 @@ all: \
 	$(OUT_DIR)/release/console.dll \
 	$(OUT_DIR)/release/file.dll \
 	$(OUT_DIR)/release/file.test.dll \
+	$(OUT_DIR)/release/lang_html.dll \
 	$(OUT_DIR)/release/lang_markdown.dll \
 	$(OUT_DIR)/release/markx.exe \
 	$(OUT_DIR)/release/model.dll \
@@ -157,6 +159,39 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
 
 # ----------------------------------------------------------------------
+# lang_html
+
+LANG_HTML_SRC = \
+	src/lang_html/lang.cpp \
+	src/lang_html/main.cpp \
+	src/lang_html/targetPass.cpp \
+	src/lang_html/translationPass.cpp \
+
+LANG_HTML_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(LANG_HTML_SRC)))
+
+$(OUT_DIR)/debug/lang_html.dll: $(LANG_HTML_DEBUG_OBJ) $(OUT_DIR)/debug/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/debug
+	@$(LINK_CMD) -shared -o $@ $(LANG_HTML_DEBUG_OBJ) $(DEBUG_LNK_FLAGS_POST) -Lbin/out/debug -ltcatlib
+
+$(LANG_HTML_DEBUG_OBJ): $(OBJ_DIR)/debug/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/debug/lang_html
+	@$(COMPILE_CMD) $(DEBUG_CC_FLAGS) $< -o $@
+
+LANG_HTML_RELEASE_OBJ = $(subst src,$(OBJ_DIR)/release,$(patsubst %.cpp,%.o,$(LANG_HTML_SRC)))
+
+$(OUT_DIR)/release/lang_html.dll: $(LANG_HTML_RELEASE_OBJ) $(OUT_DIR)/release/tcatlib.lib
+	$(info $< --> $@)
+	@mkdir -p $(OUT_DIR)/release
+	@$(LINK_CMD) -shared -o $@ $(LANG_HTML_RELEASE_OBJ) $(RELEASE_LNK_FLAGS_POST) -Lbin/out/release -ltcatlib
+
+$(LANG_HTML_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
+	$(info $< --> $@)
+	@mkdir -p $(OBJ_DIR)/release/lang_html
+	@$(COMPILE_CMD) $(RELEASE_CC_FLAGS) $< -o $@
+
+# ----------------------------------------------------------------------
 # lang_markdown
 
 LANG_MARKDOWN_SRC = \
@@ -164,6 +199,7 @@ LANG_MARKDOWN_SRC = \
 	src/lang_markdown/headerTokenizingPass.cpp \
 	src/lang_markdown/lang.cpp \
 	src/lang_markdown/main.cpp \
+	src/lang_markdown/styleTokenizingPass.cpp \
 	src/lang_markdown/tocTokenizingPass.cpp \
 
 LANG_MARKDOWN_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(LANG_MARKDOWN_SRC)))
@@ -194,9 +230,11 @@ $(LANG_MARKDOWN_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 # markx
 
 MARKX_SRC = \
+	src/markx/compileCommand.cpp \
 	src/markx/finder.cpp \
 	src/markx/help.cpp \
 	src/markx/main.cpp \
+	src/markx/verb.translate.cpp \
 	src/markx/verb.update.cpp \
 
 MARKX_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(MARKX_SRC)))

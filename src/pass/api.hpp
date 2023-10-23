@@ -15,7 +15,10 @@ namespace state {
       kLines,
       kParagraphs,
       kWords,
-      kTokens
+      kTokens,
+
+      kPrepTranslate, // smaller bits in prep for translation
+      _kNext
    };
    typedef size_t type;
 }
@@ -40,6 +43,11 @@ public:
    virtual std::string inverseGuid() const = 0;
 };
 
+class iTranslationInfo : public iPassInfo {
+public:
+   virtual std::string destination() const = 0;
+};
+
 class iPass {
 public:
    virtual ~iPass() {}
@@ -59,7 +67,8 @@ class iPassManager {
 public:
    virtual ~iPassManager() {}
    virtual void add(iPassInfo& p) = 0;
-   virtual iPassSchedule& compile(iPassCatalog& c) = 0;
+   virtual iPassSchedule& compileUpdate(iPassCatalog& c) = 0;
+   virtual iPassSchedule& compileTranslate(iPassCatalog& c) = 0;
 };
 
 class iPassCatalog {
@@ -67,6 +76,7 @@ public:
    virtual ~iPassCatalog() {}
    virtual void dump(console::iLog& l) = 0;
    virtual void addAllTransforms(iPassManager& pm, bool strict) = 0;
+   virtual void translateTo(iPassManager& pm, const std::string& dest) = 0;
    virtual std::list<iDecompositionInfo*> demand(state::type in, state::type out) = 0;
    virtual iPassInfo& demand(const std::string& guid) = 0;
 };

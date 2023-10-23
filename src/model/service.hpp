@@ -28,8 +28,7 @@ class nodeServices {
 public:
    virtual ~nodeServices()
    {
-      for(auto *pSvc : m_owned)
-         pSvc->release();
+      rebindServices();
    }
 
    template<class T>
@@ -68,6 +67,16 @@ public:
             .with("service name",typeid(T).name())
             .raise();
       return *pAns;
+   }
+
+   void rebindServices()
+   {
+      for(auto *pSvc : m_owned)
+         pSvc->release();
+
+      m_bound = false;
+      m_services.clear();
+      m_owned.clear();
    }
 
 protected:

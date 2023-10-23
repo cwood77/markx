@@ -71,6 +71,8 @@ public:
                m_pLog->writeLnDebug("deferring schedule of %s because of dep",(*it)->desc().c_str());
          }
       }
+
+      m_batchGuids.clear();
    }
 
 private:
@@ -156,8 +158,23 @@ public:
       m_pInfos[p.getInput()].insert(&p);
    }
 
-   virtual iPassSchedule& compile(iPassCatalog& c)
+   virtual iPassSchedule& compileUpdate(iPassCatalog& c)
    {
+      return compile(c,/*recompose*/true);
+   }
+
+   virtual iPassSchedule& compileTranslate(iPassCatalog& c)
+   {
+      return compile(c,/*recompose*/false);
+   }
+
+private:
+   iPassSchedule& compile(iPassCatalog& c, bool recompose)
+   {
+      if(m_pInfos.size() == 0)
+         cmn::error(cdwHere,"compiling an unseeded schedule?")
+            .raise();
+
       std::unique_ptr<passSchedule> pSched(new passSchedule());
       passScheduler scheduler(*pSched);
       stateManager sm(c,scheduler);
@@ -170,12 +187,12 @@ public:
          scheduler.scheduleBatch();
       }
 
-      sm.recompose();
+      if(recompose)
+         sm.recompose();
 
       return *pSched.release();
    }
 
-private:
    std::map<state::type,std::set<iPassInfo*> > m_pInfos;
    cmn::lazyService<console::iLog> m_pLog;
 };
@@ -187,24 +204,27 @@ public:
    virtual void dump(console::iLog& l)
    {
       {
-      console::autoIndent _i(l);
-      tcat::typeSet<iPassInfo> infos;
-      for(size_t i=0;i<infos.size();i++)
-      {
-         std::stringstream msg;
-         msg << infos[i]->desc();
-         if(infos[i]->isStrictTransform())
-            msg << " [T]";
-         else if(infos[i]->isTransform())
-            msg << " [T*]";
-         if(dynamic_cast<iDecompositionInfo*>(infos[i]))
-            msg << " [D]";
-         l.writeLnInfo(msg.str());
-      }
+         console::autoIndent _i(l);
+         tcat::typeSet<iPassInfo> infos;
+         for(size_t i=0;i<infos.size();i++)
+         {
+            std::stringstream msg;
+            msg << infos[i]->desc();
+            if(infos[i]->isStrictTransform())
+               msg << " [T]";
+            else if(infos[i]->isTransform())
+               msg << " [T*]";
+            if(dynamic_cast<iDecompositionInfo*>(infos[i]))
+               msg << " [D]";
+            if(dynamic_cast<iTranslationInfo*>(infos[i]))
+               msg << " [X]";
+            l.writeLnInfo(msg.str());
+         }
       }
       l.writeLnInfo("T  = strict transform pass");
       l.writeLnInfo("T* = non-strict transform pass");
       l.writeLnInfo("D  = decomposition pass");
+      l.writeLnInfo("X  = translation pass");
    }
 
    virtual void addAllTransforms(iPassManager& pm, bool strict)
@@ -216,6 +236,17 @@ public:
             (!strict && infos[i]->isTransform())
          )
             pm.add(*infos[i]);
+   }
+
+   virtual void translateTo(iPassManager& pm, const std::string& dest)
+   {
+      tcat::typeSet<iPassInfo> infos;
+      for(size_t i=0;i<infos.size();i++)
+      {
+         auto *pX = dynamic_cast<iTranslationInfo*>(infos[i]);
+         if(pX && pX->destination() == dest)
+            pm.add(*infos[i]);
+      }
    }
 
    virtual std::list<iDecompositionInfo*> demand(state::type in, state::type out)
