@@ -11,8 +11,17 @@ depsOn-done: b2a73d9b-0d26-44d9-a818bef3
 ---------------------------
 title: TOC references
 id: 0a50981b-8b4b-4570-999ff23c
-state: new
-notes: 
+state: done
+notes:<
+   What would the sentinel text look like?
+      see also NUMBER
+      refer to NUMBER
+      ... section NUMBER words in title.
+   Maybe _just_ the last one?
+   plan:
+    ok - shared decompostion/recomposition finds these
+    - strict transform binds them
+>
 milestone: eto-markdown
 priority: 
 depsOn-undone: 
