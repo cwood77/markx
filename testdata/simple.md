@@ -19,6 +19,8 @@ now a line with a [citation] and [another].
 
   this lines has two leading spaces
 
+And _this_ line has some *boldface*.
+
 ### 2.1. Indented
 
 ## 3. Unindented

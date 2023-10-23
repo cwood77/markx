@@ -2,6 +2,7 @@
 
 namespace pass {
 
+#if 0
 namespace state {
    enum htmlState {
       kTranslate = _kNext, // switch language from markdown to html
@@ -9,5 +10,6 @@ namespace state {
       kHtmlComplete        // target pass state
    };
 }
+#endif
 
 } // namespace pass

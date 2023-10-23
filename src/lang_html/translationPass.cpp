@@ -1,7 +1,6 @@
 #include "../file/manager.hpp"
 #include "../pass_lib/api.hpp"
 #include "../tcatlib/api.hpp"
-#include "state.hpp"
 
 namespace pass {
 namespace {
@@ -24,11 +23,15 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      // TODO: no longer relevant -- delete whole pass
+
+#if 0
       tcat::typePtr<file::iFileManager> fMan;
       auto ext = fMan->getExtension(n.path);
       auto withoutExt = std::string(n.path.c_str(),n.path.length() - ext.length());
       n.path = withoutExt + "html";
       n.rebindServices();
+#endif
    }
 };
 

@@ -10,7 +10,8 @@ namespace {
 class language : public iOwnedService, public iLanguage {
 public:
    virtual void release() { delete this; }
-   virtual std::string desc() { return "HTML"; }
+   virtual std::string desc() { return "html"; }
+   virtual bool targetOnly() const { return true; }
 };
 
 class nodeServiceProvider : public iNodeServiceProvider {

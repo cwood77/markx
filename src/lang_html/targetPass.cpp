@@ -1,6 +1,6 @@
+#include "../file/manager.hpp"
 #include "../pass_lib/api.hpp"
 #include "../tcatlib/api.hpp"
-#include "state.hpp"
 
 namespace pass {
 namespace {
@@ -12,6 +12,23 @@ public:
 protected:
    virtual void runOnFile(model::file& n)
    {
+      tcat::typePtr<file::iFileManager> fMan;
+      auto ext = fMan->getExtension(n.path);
+      auto withoutExt = std::string(n.path.c_str(),n.path.length() - ext.length());
+
+#if 0
+      auto& outF = n.insertSibling(*new model::file(withoutExt + "html"));
+      outF.pSource = &n;
+      n.pTarget = &outF;
+
+      m_pLog->writeLnInfo(
+         "target file '%s' cooresponds to source file '%s'",
+         outF.path.c_str(),
+         n.path.c_str());
+#else
+      n.path = withoutExt + "html";
+      n.rebindServices();
+#endif
    }
 };
 

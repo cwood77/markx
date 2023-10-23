@@ -5,6 +5,7 @@
 #include <string>
 
 namespace console { class iLog; };
+namespace model { class file; }
 namespace pass { class iPassCatalog; };
 namespace pass { class iPassManager; };
 namespace pass { class iPassSchedule; };
@@ -20,6 +21,7 @@ public:
    virtual void run(console::iLog& l);
 
 protected:
+   virtual void considerFile(console::iLog& l, model::file& f);
    virtual pass::iPassSchedule& compile(pass::iPassManager& pm, pass::iPassCatalog& pc) = 0;
 };
 

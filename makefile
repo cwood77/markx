@@ -164,6 +164,7 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 LANG_HTML_SRC = \
 	src/lang_html/lang.cpp \
 	src/lang_html/main.cpp \
+	src/lang_html/styleTokenizingPass.cpp \
 	src/lang_html/targetPass.cpp \
 	src/lang_html/translationPass.cpp \
 

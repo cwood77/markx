@@ -51,14 +51,7 @@ void compileCommand::run(console::iLog& l)
          l.writeLnVerbose("considering file %s",f.c_str());
          console::autoIndent _i(l);
          auto& leaf = pNode->addChild(*new model::file(f));
-         auto *pL = leaf.fetchService<model::iLanguage>();
-         if(pL)
-            l.writeLnVerbose("identified language %s",pL->desc().c_str());
-         else
-         {
-            l.writeLnVerbose("no known language; ignoring");
-            leaf.destroy();
-         }
+         considerFile(l,leaf);
       }
    }
 
@@ -74,4 +67,23 @@ void compileCommand::run(console::iLog& l)
    pSched->run();
 
    l.writeLnVerbose("done");
+}
+
+void compileCommand::considerFile(console::iLog& l, model::file& f)
+{
+   auto *pL = f.fetchService<model::iLanguage>();
+   if(pL)
+   {
+      l.writeLnVerbose("identified language %s",pL->desc().c_str());
+      if(pL->targetOnly())
+      {
+         l.writeLnVerbose("   but it is target only; ignoring");
+         f.destroy();
+      }
+   }
+   else
+   {
+      l.writeLnVerbose("no known language; ignoring");
+      f.destroy();
+   }
 }

@@ -12,6 +12,7 @@ class language : public iOwnedService, public iLanguage, public pass::iPunctuati
 public:
    virtual void release() { delete this; }
    virtual std::string desc() { return "markdown"; }
+   virtual bool targetOnly() const { return false; }
    virtual void getMidwordPunctuation(std::set<std::string>& p) const
    {
       // limit this to only what I need for now

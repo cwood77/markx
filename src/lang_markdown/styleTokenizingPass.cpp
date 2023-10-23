@@ -1,5 +1,4 @@
 #include "../model/lang.hpp"
-#include "../model/textServices.hpp"
 #include "../pass_lib/api.hpp"
 #include "../tcatlib/api.hpp"
 
@@ -28,7 +27,28 @@ protected:
 
    void runOnWord(model::text& w)
    {
+      if(w.text == "*")
+         swapNode(w,model::style::kBold);
+      else if(w.text == "_")
+         swapNode(w,model::style::kItalic);
    }
+
+private:
+   void swapNode(model::node& n, model::style::kinds k)
+   {
+      bool isStart = (m_currentStyles.find(k) == m_currentStyles.end());
+
+      if(isStart)
+         m_currentStyles.insert(k);
+      else
+         m_currentStyles.erase(k);
+
+      auto& s = n.replaceSelf<model::style>();
+      s.kind = k;
+      s.start = isStart;
+   }
+
+   std::set<model::style::kinds> m_currentStyles;
 };
 
 class recompInfo : public iPassInfo {
