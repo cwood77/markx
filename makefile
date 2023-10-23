@@ -166,7 +166,6 @@ LANG_HTML_SRC = \
 	src/lang_html/main.cpp \
 	src/lang_html/styleTokenizingPass.cpp \
 	src/lang_html/targetPass.cpp \
-	src/lang_html/translationPass.cpp \
 
 LANG_HTML_DEBUG_OBJ = $(subst src,$(OBJ_DIR)/debug,$(patsubst %.cpp,%.o,$(LANG_HTML_SRC)))
 
@@ -196,7 +195,6 @@ $(LANG_HTML_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 # lang_markdown
 
 LANG_MARKDOWN_SRC = \
-	src/lang_markdown/citeTokenizingPass.cpp \
 	src/lang_markdown/headerTokenizingPass.cpp \
 	src/lang_markdown/lang.cpp \
 	src/lang_markdown/main.cpp \

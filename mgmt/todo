@@ -40,7 +40,7 @@ depsOn-done:
 ---------------------------
 title: HTML converter file-level concept
 id: e85aaaa9-dd22-47ec-ad848c50
-state: new
+state: done
 notes: Today, files are read, edited, then written (update operation).  A *transform* is significantly different in that a different language is written out, and maybe with a different file format.
 milestone: eto-html
 priority: 
@@ -53,29 +53,29 @@ id: 64fb985c-ff5f-4e66-925b788c
 state: new
 notes: 
 milestone: eto-html
-priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+priority: 3
+depsOn-undone: 1f3c15bf-d9bc-4f3d-8c23b8e5
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: HTML boldface
 id: 980f3c58-8014-4954-99081e70
-state: new
+state: done
 notes: 
 milestone: eto-html
 priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: HTML italics
 id: 58c2a34a-c3c0-464e-a7735edd
-state: new
+state: done
 notes: 
 milestone: eto-html
 priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: HTML tables
@@ -83,9 +83,9 @@ id: b22bd9cf-55e1-4b62-a22e5ba1
 state: new
 notes: formatting?
 milestone: eto-html
-priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+priority: 9
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: ordered lists
@@ -93,9 +93,9 @@ id: 10856fd2-2106-489e-977f9fc2
 state: new
 notes: 
 milestone: eto-html
-priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+priority: 9
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: unordered lists
@@ -103,9 +103,9 @@ id: 64378c47-2498-49a4-a4d457c2
 state: new
 notes: 
 milestone: eto-html
-priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+priority: 9
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: images
@@ -113,9 +113,9 @@ id: 8e78fb4f-574b-4af3-824a5f79
 state: new
 notes: formatting?
 milestone: eto-html
-priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
-depsOn-done: 
+priority: 9
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
 ---------------------------
 title: designer notes
@@ -123,7 +123,27 @@ id: 041cc672-a9fa-433a-b87751f8
 state: new
 notes: formatting?
 milestone: eto-html
-priority: 
-depsOn-undone: e85aaaa9-dd22-47ec-ad848c50
+priority: 9
+depsOn-undone: 
+depsOn-done: e85aaaa9-dd22-47ec-ad848c50
+
+---------------------------
+title: HTML line endings
+id: 05c00020-e5ab-4a1f-85066da3
+state: new
+notes: 
+milestone: eto-html
+priority: 1
+depsOn-undone: 
+depsOn-done: 
+
+---------------------------
+title: HTML doc pre/postamble
+id: 1f3c15bf-d9bc-4f3d-8c23b8e5
+state: new
+notes: 
+milestone: eto-html
+priority: 2
+depsOn-undone: 
 depsOn-done: 
 

@@ -67,7 +67,6 @@ public:
    virtual ~iPassManager() {}
    virtual void add(iPassInfo& p) = 0;
    virtual iPassSchedule& compileUpdate(iPassCatalog& c) = 0;
-   virtual iPassSchedule& compileTranslate(iPassCatalog& c) = 0;
 };
 
 class iPassCatalog {

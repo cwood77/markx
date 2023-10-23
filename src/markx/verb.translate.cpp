@@ -62,8 +62,7 @@ void command::considerFile(console::iLog& l, model::file& f)
 pass::iPassSchedule& command::compile(pass::iPassManager& pm, pass::iPassCatalog& pc)
 {
    pc.translateTo(pm,oDest);
-   return pm.compileUpdate(pc); // TODO HACK - continue to use statemanager to recombine stuff!
-                                //             take out compileTranslate if this stays like this
+   return pm.compileUpdate(pc);
 }
 
 } // anonymous namespace

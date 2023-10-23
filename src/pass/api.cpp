@@ -160,17 +160,6 @@ public:
 
    virtual iPassSchedule& compileUpdate(iPassCatalog& c)
    {
-      return compile(c,/*recompose*/true);
-   }
-
-   virtual iPassSchedule& compileTranslate(iPassCatalog& c)
-   {
-      return compile(c,/*recompose*/false);
-   }
-
-private:
-   iPassSchedule& compile(iPassCatalog& c, bool recompose)
-   {
       if(m_pInfos.size() == 0)
          cmn::error(cdwHere,"compiling an unseeded schedule?")
             .raise();
@@ -187,12 +176,12 @@ private:
          scheduler.scheduleBatch();
       }
 
-      if(recompose)
-         sm.recompose();
+      sm.recompose();
 
       return *pSched.release();
    }
 
+private:
    std::map<state::type,std::set<iPassInfo*> > m_pInfos;
    cmn::lazyService<console::iLog> m_pLog;
 };

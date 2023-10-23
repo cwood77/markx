@@ -175,8 +175,6 @@ public:
    bool start;
 };
 
-class cite : public text {};
-
 #include "ast.ipp"
 
 } // namespace model
