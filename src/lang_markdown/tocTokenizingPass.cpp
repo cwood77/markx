@@ -52,6 +52,8 @@ protected:
 
    virtual void runOnFile(model::file& n)
    {
+      m_tocs.clear();
+
       n.forEachChild<model::text>([&](auto& p)
       {
          checkParagraph(p);

@@ -53,7 +53,7 @@ id: 64fb985c-ff5f-4e66-925b788c
 state: new
 notes: 
 milestone: eto-html
-priority: 3
+priority: 9
 depsOn-undone: 1f3c15bf-d9bc-4f3d-8c23b8e5
 depsOn-done: e85aaaa9-dd22-47ec-ad848c50
 
@@ -140,7 +140,7 @@ depsOn-done:
 ---------------------------
 title: HTML doc pre/postamble
 id: 1f3c15bf-d9bc-4f3d-8c23b8e5
-state: new
+state: done
 notes: 
 milestone: eto-html
 priority: 2
