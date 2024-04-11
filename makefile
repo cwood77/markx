@@ -163,6 +163,7 @@ $(FILE_TEST_RELEASE_OBJ): $(OBJ_DIR)/release/%.o: src/%.cpp
 
 LANG_HTML_SRC = \
 	src/lang_html/docPreamblePeelingPass.cpp \
+	src/lang_html/headerTokenizingPass.cpp \
 	src/lang_html/lang.cpp \
 	src/lang_html/lineTerminatingPass.cpp \
 	src/lang_html/main.cpp \

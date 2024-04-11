@@ -1,7 +1,7 @@
 #include "../model/lang.hpp"
 #include "../pass_lib/api.hpp"
 #include "../tcatlib/api.hpp"
-#include <sstream>
+#include <cstring>
 
 namespace pass {
 namespace {
@@ -15,7 +15,20 @@ protected:
 
    virtual void runOnFile(model::file& n)
    {
-      n.forEachChild<model::text>([](auto& l){ l.text += "<br/>"; });
+      n.forEachChild<model::text>([&](auto& l){ checkLine(l); });
+   }
+
+private:
+   void checkLine(model::text& l)
+   {
+      if(l.text.length() > 5)
+      {
+         std::string end = l.text.c_str()+l.text.length()-5;
+         if(end.c_str()[4] == '>' &&
+            ::strncmp(end.c_str(),"</h",3)==0)
+            return; // don't terminate headers
+      }
+      l.text += "<br/>";
    }
 };
 
