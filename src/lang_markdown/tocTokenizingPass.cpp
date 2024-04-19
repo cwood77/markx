@@ -29,6 +29,10 @@ private:
          auto& l = t.addChild<model::text>();
          l.addChild<model::text>().text = it->first;
          l.addChild<model::text>().text = it->second;
+
+         // add a blank line after to prevent weird markdown rendering...
+         // ... but doing so makes it harder to know what to replace on roundtrip!
+         //t.addChild<model::text>();
       }
 
       t.replaceSelf<model::text>();

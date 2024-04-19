@@ -4,7 +4,6 @@ this is a paragraph
 
 Table of Contents
 1. Another heading
-10. Again
 2. Sibling header
 2.1. Indented
 3. Unindented
@@ -16,6 +15,7 @@ Table of Contents
 7. Again
 8. Again
 9. Again
+10. Again
 
 ## 1. Another heading
 

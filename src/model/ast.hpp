@@ -5,7 +5,9 @@
 #include "attr.hpp"
 #include "service.hpp"
 #include <functional>
+#include <list>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace model {
@@ -157,7 +159,7 @@ public:
 
 class toc : public text {
 public:
-   std::map<std::string,std::string> entries;
+   std::list<std::pair<std::string,std::string> > entries;
 };
 
 class sectionRef : public sectionBase {};

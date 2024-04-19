@@ -28,7 +28,7 @@ protected:
          // link headers
          for(auto *pHeader : headers)
             if(!pHeader->number.empty())
-               pToc->entries[pHeader->number] = pHeader->text;
+               pToc->entries.push_back(std::make_pair<>(pHeader->number,pHeader->text));
       }
    }
 };
