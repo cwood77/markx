@@ -11,6 +11,7 @@ rmdir /S /Q bin\out\markx-%1-win64-rel >nul 2>&1
 mkdir bin\out\markx-%1-win64-rel
 copy bin\out\release\console.dll bin\out\markx-%1-win64-rel\.
 copy bin\out\release\file.dll bin\out\markx-%1-win64-rel\.
+copy bin\out\release\lang_html.dll bin\out\markx-%1-win64-rel\.
 copy bin\out\release\lang_markdown.dll bin\out\markx-%1-win64-rel\.
 copy bin\out\release\markx.exe bin\out\markx-%1-win64-rel\.
 copy bin\out\release\model.dll bin\out\markx-%1-win64-rel\.
